@@ -432,4 +432,36 @@ class ProductController extends Controller
         $attribute = $product->attributes->firstWhere('attribute_name', $key);
         return $attribute ? $attribute->attribute_value : $default;
     }
+
+    /**
+ * Quick view product details (AJAX)
+ */
+public function quickView($productId)
+{
+    $product = Product::with(['category', 'variations', 'media'])
+        ->where('id', $productId)
+        ->where('status', 'active')
+        ->firstOrFail();
+
+    // Add computed properties
+    $product->main_image_url = $product->getFirstMediaUrl('main') ?: 'https://via.placeholder.com/400x300';
+    $product->availability_class = $product->available_quantity > 5 ? 'in-stock' : 
+                                  ($product->available_quantity > 0 ? 'low-stock' : 'out-stock');
+    
+    // Get basic specifications
+    $specifications = [];
+    if ($product->brand) {
+        $specifications[] = ['icon' => 'fas fa-tag', 'value' => $product->brand];
+    }
+    if ($product->model) {
+        $specifications[] = ['icon' => 'fas fa-cog', 'value' => $product->model];
+    }
+    
+    $product->specifications = $specifications;
+
+    return response()->json([
+        'success' => true,
+        'html' => view('frontend.products.partials.quick-view-content', compact('product'))->render()
+    ]);
+}
 }

@@ -27,6 +27,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/equipment', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/equipment/{category}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/equipment/{category}/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/products/{product}/quick-view', [ProductController::class, 'quickView'])->name('products.quick-view');
 
 // Services - New Structure
 Route::prefix('services')->group(function () {

@@ -23,6 +23,9 @@
     
     <!-- CTA Section -->
     @include('frontend.home.sections.cta')
+
+    <!-- Quick View Modal -->
+@include('frontend.products.partials.quick-view-modal')
 @endsection
 
 @push('styles')
