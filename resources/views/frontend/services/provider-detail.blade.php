@@ -63,7 +63,7 @@
                                             @for($i = 1; $i <= 5; $i++)
                                                 <i class="fas fa-star {{ $i <= $provider->rating ? 'text-warning' : 'text-muted' }}"></i>
                                             @endfor
-                                            <span class="ms-2">
+                                            <span class="rating-info ms-2">
                                                 {{ number_format($provider->rating, 1) }} 
                                                 ({{ $provider->total_reviews }} {{ Str::plural('review', $provider->total_reviews) }})
                                             </span>
@@ -78,7 +78,7 @@
                 <!-- About Section -->
                 <div class="provider-section">
                     <h3 class="section-title">About</h3>
-                    <p class="provider-bio">{{ $provider->bio }}</p>
+                    <p class="provider-bio">{!! nl2br(strip_tags($provider->bio)) !!}</p>
                     
                     <div class="provider-stats mt-4">
                         <div class="row g-3">
@@ -115,77 +115,77 @@
                 </div>
                 
                 @if($provider->mediaItems->count() > 0)
-    <div class="provider-section">
-        <h3 class="section-title">Portfolio</h3>
-        <div class="media-gallery">
-            <div class="row g-3">
-                @foreach($provider->getAllPortfolioItems() as $media)
-                    <div class="col-md-4">
-                        <div class="media-item" data-type="{{ $media->type }}">
-                            @if($media->type == 'image')
-                                <!-- Image Display -->
-                                <a href="{{ $media->url }}" 
-                                   data-fancybox="gallery" 
-                                   data-caption="{{ $media->title }}">
-                                    <img src="{{ $media->url }}" 
-                                         alt="{{ $media->title }}"
-                                         class="img-fluid rounded"
-                                         loading="lazy">
-                                    <div class="media-overlay">
-                                        <i class="fas fa-search-plus"></i>
+                    <div class="provider-section">
+                        <h3 class="section-title">Portfolio</h3>
+                        <div class="media-gallery">
+                            <div class="row g-3">
+                                @foreach($provider->getAllPortfolioItems() as $media)
+                                    <div class="col-md-4">
+                                        <div class="media-item" data-type="{{ $media->type }}">
+                                            @if($media->type == 'image')
+                                                <!-- Image Display -->
+                                                <a href="{{ $media->url }}" 
+                                                   data-fancybox="gallery" 
+                                                   data-caption="{{ $media->title }}">
+                                                    <img src="{{ $media->url }}" 
+                                                         alt="{{ $media->title }}"
+                                                         class="img-fluid rounded"
+                                                         loading="lazy">
+                                                    <div class="media-overlay">
+                                                        <i class="fas fa-search-plus"></i>
+                                                    </div>
+                                                </a>
+                                            @elseif($media->type == 'video')
+                                                <!-- Video Display -->
+                                                <div class="video-wrapper">
+                                                    @if($media->thumbnail_url)
+                                                        <img src="{{ $media->thumbnail_url }}" 
+                                                             alt="{{ $media->title }}"
+                                                             class="img-fluid rounded video-thumbnail"
+                                                             loading="lazy">
+                                                    @else
+                                                        <div class="video-placeholder">
+                                                            <i class="fas fa-play-circle"></i>
+                                                        </div>
+                                                    @endif
+                                                    <a href="{{ $media->url }}" 
+                                                       data-fancybox="gallery"
+                                                       data-caption="{{ $media->title }}"
+                                                       class="play-button">
+                                                        <i class="fas fa-play"></i>
+                                                    </a>
+                                                </div>
+                                            @elseif($media->type == 'audio')
+                                                <!-- Audio Display -->
+                                                <div class="audio-wrapper">
+                                                    <div class="audio-placeholder">
+                                                        <i class="fas fa-music"></i>
+                                                    </div>
+                                                    <h5 class="media-title">{{ $media->title }}</h5>
+                                                    <audio controls class="w-100 mt-2">
+                                                        <source src="{{ $media->url }}" type="audio/mpeg">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                </div>
+                                            @endif
+                                            
+                                            <!-- Media Info -->
+                                            <div class="media-info mt-2">
+                                                <h6 class="media-title">{{ $media->title }}</h6>
+                                                @if($media->description)
+                                                    <p class="media-description">{{ $media->description }}</p>
+                                                @endif
+                                                @if($media->is_featured)
+                                                    <span class="badge bg-primary">Featured</span>
+                                                @endif
+                                            </div>
+                        </div>
                                     </div>
-                                </a>
-                            @elseif($media->type == 'video')
-                                <!-- Video Display -->
-                                <div class="video-wrapper">
-                                    @if($media->thumbnail_url)
-                                        <img src="{{ $media->thumbnail_url }}" 
-                                             alt="{{ $media->title }}"
-                                             class="img-fluid rounded video-thumbnail"
-                                             loading="lazy">
-                                    @else
-                                        <div class="video-placeholder">
-                                            <i class="fas fa-play-circle"></i>
-                                        </div>
-                                    @endif
-                                    <a href="{{ $media->url }}" 
-                                       data-fancybox="gallery"
-                                       data-caption="{{ $media->title }}"
-                                       class="play-button">
-                                        <i class="fas fa-play"></i>
-                                    </a>
-                                </div>
-                            @elseif($media->type == 'audio')
-                                <!-- Audio Display -->
-                                <div class="audio-wrapper">
-                                    <div class="audio-placeholder">
-                                        <i class="fas fa-music"></i>
-                                    </div>
-                                    <h5>{{ $media->title }}</h5>
-                                    <audio controls class="w-100 mt-2">
-                                        <source src="{{ $media->url }}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                </div>
-                            @endif
-                            
-                            <!-- Media Info -->
-                            <div class="media-info">
-                                <h5 class="media-title">{{ $media->title }}</h5>
-                                @if($media->description)
-                                    <p class="media-description">{{ $media->description }}</p>
-                                @endif
-                                @if($media->is_featured)
-                                    <span class="badge bg-primary">Featured</span>
-                                @endif
+                                @endforeach
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-@endif
+                @endif
                 
                 <!-- Specialties -->
                 @if($provider->specialties && count($provider->specialties) > 0)
@@ -243,150 +243,137 @@
             
             <!-- Right Column - Booking -->
             <div class="col-lg-4">
-                <div class="booking-card">
-                    <h3 class="booking-title">Book {{ $provider->display_name }}</h3>
-                    
-                    <!-- Pricing Tiers -->
-                    @if($provider->pricingTiers->count() > 0)
-                        <div class="pricing-tiers mb-4">
-                            @foreach($provider->pricingTiers as $tier)
-                                <div class="pricing-tier {{ $tier->is_popular ? 'popular' : '' }}">
-                                    @if($tier->is_popular)
-                                        <span class="popular-badge">Most Popular</span>
-                                    @endif
-                                    <h5 class="tier-name">{{ $tier->tier_name }}</h5>
-                                    <div class="tier-price">
-                                        LKR {{ number_format($tier->price) }}
-                                    </div>
-                                    <div class="tier-duration">{{ $tier->duration }}</div>
-                                    @if($tier->included_features)
-                                        <ul class="tier-features">
-                                            @foreach($tier->included_features as $feature)
-                                                <li>{{ $feature }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="base-pricing mb-4">
-                            <div class="price-display">
-                                <span class="price-label">Starting from</span>
-                                <span class="price-value">LKR {{ number_format($provider->base_price) }}</span>
-                                <span class="price-unit">/{{ $provider->price_unit }}</span>
-                            </div>
-                        </div>
-                    @endif
-                    
-                    <!-- Booking Form -->
-                    <form id="providerBookingForm" class="booking-form">
-                        @csrf
-                        <input type="hidden" name="provider_id" value="{{ $provider->id }}">
+                <div class="booking-card-wrapper">
+                    <div class="booking-card">
+                        <h3 class="booking-title">Book {{ $provider->display_name }}</h3>
                         
-                        <div class="mb-3">
-                            <label class="form-label">Event Date</label>
-                            <input type="date" 
-                                   class="form-control" 
-                                   name="event_date" 
-                                   id="event_date"
-                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                   required>
-                        </div>
-                        
+                        <!-- Pricing Tiers -->
                         @if($provider->pricingTiers->count() > 0)
-                            <div class="mb-3">
-                                <label class="form-label">Select Package</label>
-                                <select class="form-select" name="pricing_tier_id" id="pricing_tier_id" required>
-                                    <option value="">Choose a package</option>
-                                    @foreach($provider->pricingTiers as $tier)
-                                        <option value="{{ $tier->id }}" 
-                                                data-price="{{ $tier->price }}"
-                                                data-duration="{{ $tier->duration }}"
-                                                {{ $tier->is_popular ? 'selected' : '' }}>
-                                            {{ $tier->tier_name }} - LKR {{ number_format($tier->price) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @else
-                            <div class="mb-3">
-                                <label class="form-label">Duration (hours)</label>
-                                <input type="number" 
-                                       class="form-control" 
-                                       name="duration" 
-                                       id="duration"
-                                       min="{{ $provider->min_booking_hours }}"
-                                       max="{{ $provider->max_booking_hours ?? 24 }}"
-                                       value="{{ $provider->min_booking_hours }}"
-                                       required>
-                            </div>
-                        @endif
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Start Time</label>
-                            <input type="time" 
-                                   class="form-control" 
-                                   name="start_time" 
-                                   id="start_time"
-                                   required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-2">
-                            <i class="fas fa-shopping-cart me-2"></i>
-                            Add to Cart
-                        </button>
-                        
-                        <button type="button" class="btn btn-outline-primary w-100" id="checkAvailabilityBtn">
-                            <i class="fas fa-calendar-check me-2"></i>
-                            Check Availability
-                        </button>
-                    </form>
-                    
-                    <!-- Availability Calendar Preview -->
-                    <div class="availability-preview mt-4">
-                        <h5 class="mb-3">Availability</h5>
-                        <div class="calendar-mini">
-                            <div class="calendar-grid">
-                                @foreach(array_slice($availabilityDates, 0, 14) as $date)
-                                    <div class="calendar-day {{ $date['available'] ? 'available' : 'unavailable' }}" 
-                                         title="{{ date('M j', strtotime($date['date'])) }}">
-                                        {{ $date['display'] }}
+                            <div class="pricing-tiers mb-4">
+                                @foreach($provider->pricingTiers as $tier)
+                                    <div class="pricing-tier {{ $tier->is_popular ? 'popular' : '' }}">
+                                        @if($tier->is_popular)
+                                            <span class="popular-badge">Most Popular</span>
+                                        @endif
+                                        <h5 class="tier-name">{{ $tier->tier_name }}</h5>
+                                        <div class="tier-price">
+                                            <span class="currency">LKR</span>
+                                            <span class="amount">{{ number_format($tier->price) }}</span>
+                                        </div>
+                                        <div class="tier-duration">{{ $tier->duration }}</div>
+                                        @if($tier->included_features)
+                                            <ul class="tier-features">
+                                                @foreach($tier->included_features as $feature)
+                                                    <li>{{ $feature }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="calendar-legend mt-2">
-                                <span class="legend-item">
-                                    <span class="legend-box available"></span> Available
-                                </span>
-                                <span class="legend-item">
-                                    <span class="legend-box unavailable"></span> Unavailable
-                                </span>
+                        @else
+                            <div class="base-pricing mb-4">
+                                <div class="price-display">
+                                    <span class="price-label">Starting from</span>
+                                    <div class="price-amount">
+                                        <span class="currency">LKR</span>
+                                        <span class="amount">{{ number_format($provider->base_price) }}</span>
+                                        <span class="price-unit">/{{ $provider->price_unit }}</span>
+                                    </div>
+                                </div>
                             </div>
+                        @endif
+                        
+                        <!-- Booking Form -->
+                        <form id="providerBookingForm" class="booking-form">
+                            @csrf
+                            <input type="hidden" name="provider_id" value="{{ $provider->id }}">
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Event Date</label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       name="event_date" 
+                                       id="event_date"
+                                       min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                       required>
+                            </div>
+                            
+                            @if($provider->pricingTiers->count() > 0)
+                                <div class="mb-3">
+                                    <label class="form-label">Select Package</label>
+                                    <select class="form-select" name="pricing_tier_id" id="pricing_tier_id" required>
+                                        <option value="">Choose a package</option>
+                                        @foreach($provider->pricingTiers as $tier)
+                                            <option value="{{ $tier->id }}" 
+                                                    data-price="{{ $tier->price }}"
+                                                    data-duration="{{ $tier->duration }}"
+                                                    {{ $tier->is_popular ? 'selected' : '' }}>
+                                                {{ $tier->tier_name }} - LKR {{ number_format($tier->price) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <label class="form-label">Duration (hours)</label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="duration" 
+                                           id="duration"
+                                           min="{{ $provider->min_booking_hours }}"
+                                           max="{{ $provider->max_booking_hours ?? 24 }}"
+                                           value="{{ $provider->min_booking_hours }}"
+                                           required>
+                                </div>
+                            @endif
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Start Time</label>
+                                <input type="time" 
+                                       class="form-control" 
+                                       name="start_time" 
+                                       id="start_time"
+                                       required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-2">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Add to Cart
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline-primary w-100" id="checkAvailabilityBtn">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Check Availability
+                            </button>
+                        </form>
+                        
+                        <!-- Quick Info -->
+                        <div class="quick-info mt-4">
+                            <h5 class="info-title mb-3">Quick Info</h5>
+                            <ul class="info-list">
+                                @if($provider->languages)
+                                    <li>
+                                        <i class="fas fa-language"></i>
+                                        <span>Languages: {{ implode(', ', $provider->languages) }}</span>
+                                    </li>
+                                @endif
+                                @if($provider->equipment_provided)
+                                    <li>
+                                        <i class="fas fa-check-circle text-success"></i>
+                                        <span>Equipment Provided</span>
+                                    </li>
+                                @endif
+                                <li>
+                                    <i class="fas fa-clock"></i>
+                                    <span>Min Booking: {{ $provider->min_booking_hours }} hours</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Service Area: Kuala Lumpur & Selangor</span>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    
-                    <!-- Contact Info -->
-                    <div class="contact-info mt-4">
-                        <h5 class="mb-3">Quick Info</h5>
-                        <ul class="info-list">
-                            @if($provider->languages)
-                                <li>
-                                    <i class="fas fa-language"></i>
-                                    Languages: {{ implode(', ', $provider->languages) }}
-                                </li>
-                            @endif
-                            @if($provider->equipment_provided)
-                                <li>
-                                    <i class="fas fa-check-circle text-success"></i>
-                                    Equipment Provided
-                                </li>
-                            @endif
-                            <li>
-                                <i class="fas fa-clock"></i>
-                                Min Booking: {{ $provider->min_booking_hours }} hours
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -398,7 +385,7 @@
                 <h2 class="section-title text-center mb-4">Similar Service Providers</h2>
                 <div class="row g-4">
                     @foreach($relatedProviders as $related)
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-4 col-md-6">
                             <x-service-provider-card :provider="$related" />
                         </div>
                     @endforeach
@@ -447,6 +434,9 @@
 
 @push('styles')
 <style>
+/* Import Bebas Neue font */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 /* Provider Detail Styles */
 .provider-detail {
     background-color: var(--bg-darker);
@@ -464,89 +454,137 @@
     max-width: 200px;
     height: 200px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 25px;
     border: 3px solid var(--border-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
+/* Typography */
 .provider-name {
-    font-size: 32px;
-    font-weight: 800;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
     color: var(--text-light);
+    line-height: 1;
     word-wrap: break-word;
 }
 
 .real-name {
-    font-size: 16px;
-}
-
-/* Prevent header overflow */
-.provider-header {
-    overflow: hidden;
-}
-
-.provider-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.provider-section {
-    background: var(--bg-card);
-    padding: 30px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-dark);
-    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 .section-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
     color: var(--text-light);
+}
+
+.booking-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.info-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-light);
+}
+
+/* Provider Section */
+.provider-section {
+    background: var(--bg-card);
+    padding: 35px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+/* Provider Bio */
+.provider-bio {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-gray);
+    font-size: 1rem;
+    line-height: 1.8;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
 
 /* Stats Box */
 .stat-box {
     background: var(--bg-darker);
-    padding: 20px;
-    border-radius: 15px;
+    padding: 25px;
+    border-radius: 20px;
     text-align: center;
     border: 1px solid var(--border-dark);
+    transition: all 0.3s;
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(147, 51, 234, 0.3);
+    border-color: var(--primary-purple);
 }
 
 .stat-box i {
-    font-size: 24px;
+    font-size: 28px;
     color: var(--primary-purple);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     display: block;
 }
 
 .stat-value {
     display: block;
-    font-size: 24px;
-    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
     color: var(--text-light);
+    line-height: 1;
 }
 
 .stat-label {
     display: block;
-    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
     color: var(--text-gray);
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-top: 0.5rem;
 }
 
 /* Media Gallery */
 .media-gallery {
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .media-item {
     position: relative;
     overflow: hidden;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+.media-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
 }
 
 .media-item img {
@@ -560,29 +598,65 @@
     transform: scale(1.05);
 }
 
-.video-thumbnail {
+.media-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(147, 51, 234, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.media-item:hover .media-overlay {
+    opacity: 1;
+}
+
+.media-overlay i {
+    color: white;
+    font-size: 2rem;
+}
+
+.video-wrapper {
     position: relative;
 }
 
-.play-icon {
+.play-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 60px;
     height: 60px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(147, 51, 234, 0.9);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 20px;
+    transition: all 0.3s;
+}
+
+.play-button:hover {
+    background: var(--primary-purple);
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 .media-title {
-    margin-top: 10px;
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.media-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
     color: var(--text-gray);
 }
 
@@ -590,38 +664,41 @@
 .specialties-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
 
 .specialty-tag {
     background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
     color: var(--primary-purple);
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
     border: 1px solid rgba(147, 51, 234, 0.2);
+    transition: all 0.3s;
+}
+
+.specialty-tag:hover {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(147, 51, 234, 0.3);
 }
 
 /* Reviews */
 .review-item {
     background: var(--bg-darker);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 15px;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 20px;
     border: 1px solid var(--border-dark);
 }
 
-.review-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 15px;
-}
-
 .reviewer-name {
-    font-size: 16px;
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
     margin-bottom: 5px;
 }
 
@@ -629,88 +706,120 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--text-gray);
 }
 
 .review-title {
-    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: 10px;
     color: var(--text-light);
 }
 
 .review-comment {
+    font-family: 'Inter', sans-serif;
     color: var(--text-gray);
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
 .verified-badge {
     background: rgba(34, 197, 94, 0.1);
     color: var(--success-green);
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
-/* Booking Card - NO STICKY, NO SCROLLBAR */
+/* Booking Card Wrapper */
+.booking-card-wrapper {
+    position: sticky;
+    top: 100px;
+    z-index: 10;
+}
+
+/* Booking Card */
 .booking-card {
     background: var(--bg-card);
-    padding: 30px;
-    border-radius: 20px;
+    padding: 35px;
+    border-radius: 25px;
     border: 1px solid var(--border-dark);
-}
-
-.booking-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: var(--text-light);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 /* Pricing Tiers */
 .pricing-tier {
     background: var(--bg-darker);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 15px;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 20px;
     border: 1px solid var(--border-dark);
     position: relative;
+    transition: all 0.3s;
+}
+
+.pricing-tier:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(147, 51, 234, 0.3);
 }
 
 .pricing-tier.popular {
     border-color: var(--primary-purple);
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
 }
 
 .popular-badge {
     position: absolute;
-    top: -10px;
+    top: -12px;
     right: 20px;
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
     color: white;
-    padding: 5px 15px;
+    padding: 6px 20px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .tier-name {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 15px;
 }
 
 .tier-price {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--primary-purple);
+    margin-bottom: 10px;
+}
+
+.currency {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text-gray);
+    margin-right: 5px;
+}
+
+.amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
 }
 
 .tier-duration {
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
     color: var(--text-gray);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .tier-features {
@@ -720,10 +829,11 @@
 }
 
 .tier-features li {
-    padding: 5px 0;
+    padding: 8px 0;
     color: var(--text-gray);
-    font-size: 14px;
-    padding-left: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    padding-left: 24px;
     position: relative;
 }
 
@@ -739,8 +849,8 @@
 /* Base Pricing */
 .base-pricing {
     background: var(--bg-darker);
-    padding: 25px;
-    border-radius: 15px;
+    padding: 30px;
+    border-radius: 20px;
     text-align: center;
     border: 1px solid var(--border-dark);
 }
@@ -752,88 +862,35 @@
 }
 
 .price-label {
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
     color: var(--text-gray);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
-.price-value {
-    font-size: 32px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.price-amount {
+    display: flex;
+    align-items: baseline;
 }
 
 .price-unit {
-    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
     color: var(--text-gray);
+    margin-left: 5px;
 }
 
-/* Calendar Mini */
-.calendar-mini {
+/* Quick Info */
+.quick-info {
     background: var(--bg-darker);
-    padding: 15px;
-    border-radius: 15px;
+    padding: 25px;
+    border-radius: 20px;
     border: 1px solid var(--border-dark);
 }
 
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-}
-
-.calendar-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.calendar-day.available {
-    background: rgba(34, 197, 94, 0.2);
-    color: var(--success-green);
-}
-
-.calendar-day.unavailable {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--text-gray);
-}
-
-.calendar-legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    font-size: 12px;
-    color: var(--text-gray);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.legend-box {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-}
-
-.legend-box.available {
-    background: rgba(34, 197, 94, 0.5);
-}
-
-.legend-box.unavailable {
-    background: rgba(239, 68, 68, 0.3);
-}
-
-/* Contact Info */
 .info-list {
     list-style: none;
     padding: 0;
@@ -841,20 +898,55 @@
 }
 
 .info-list li {
-    padding: 8px 0;
+    padding: 10px 0;
     color: var(--text-gray);
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .info-list i {
     width: 20px;
-    margin-right: 10px;
     color: var(--primary-purple);
+    text-align: center;
+}
+
+/* Form Controls */
+.booking-form .form-control,
+.booking-form .form-select {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--text-primary);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.booking-form .form-control:focus,
+.booking-form .form-select:focus {
+    background: var(--bg-dark);
+    border-color: var(--primary-purple);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
+}
+
+/* Form Labels */
+.booking-form .form-label {
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 0.875rem;
 }
 
 /* Related Providers */
 .related-providers {
-    padding-top: 40px;
+    padding-top: 60px;
     border-top: 1px solid var(--border-dark);
 }
 
@@ -869,6 +961,17 @@
 }
 
 .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-light);
+}
+
+/* Rating Info */
+.rating-info {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     color: var(--text-light);
 }
 
@@ -888,44 +991,41 @@
     .booking-card {
         margin-top: 30px;
     }
+    
+    .booking-card-wrapper {
+        position: relative;
+        top: 0;
+    }
+    
+    .provider-name {
+        font-size: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 768px) {
     .provider-name {
-        font-size: 24px;
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
     }
     
     .stat-box {
-        padding: 15px;
+        padding: 20px;
     }
     
     .stat-value {
-        font-size: 20px;
+        font-size: 1.5rem;
     }
-}
-
-/* Form Controls - Dark Theme */
-.booking-form .form-control,
-.booking-form .form-select {
-    background: var(--bg-dark);
-    border: 1px solid var(--border-dark);
-    color: var(--text-primary);
-    padding: 12px 15px;
-}
-
-.booking-form .form-control:focus,
-.booking-form .form-select:focus {
-    background: var(--bg-dark);
-    border-color: var(--primary-purple);
-    color: var(--text-primary);
-    box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
-}
-
-/* Form Labels */
-.booking-form .form-label {
-    color: var(--text-primary);
-    font-weight: 500;
-    margin-bottom: 8px;
+    
+    .amount {
+        font-size: 2rem;
+    }
 }
 
 /* Date input calendar icon */
@@ -965,7 +1065,6 @@
 @push('scripts')
 <script>
 // Handle Add to Cart
-// Update the form submission part
 document.getElementById('providerBookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -986,11 +1085,10 @@ document.getElementById('providerBookingForm').addEventListener('submit', functi
         _token: '{{ csrf_token() }}'
     };
     
-    // Add pricing tier or duration - ensure duration is an integer
+    // Add pricing tier or duration
     if (formData.get('pricing_tier_id')) {
         cartData.pricing_tier_id = formData.get('pricing_tier_id');
     } else {
-        // Convert duration to integer
         cartData.duration = parseInt(formData.get('duration')) || {{ $provider->min_booking_hours }};
     }
     
@@ -1007,19 +1105,14 @@ document.getElementById('providerBookingForm').addEventListener('submit', functi
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Show success message
             showNotification('success', 'Added to cart successfully!');
-            
-            // Update cart count in header
             updateCartCount();
             
-            // Trigger Livewire event for cart dropdown
             if (window.Livewire) {
                 Livewire.dispatch('cartUpdated');
                 Livewire.dispatch('itemAddedToCart');
             }
             
-            // Optionally redirect to cart
             setTimeout(() => {
                 if (confirm('Service added to cart. Would you like to view your cart?')) {
                     window.location.href = '{{ route("cart.index") }}';
@@ -1041,7 +1134,6 @@ document.getElementById('providerBookingForm').addEventListener('submit', functi
 
 // Update cart count helper
 function updateCartCount() {
-    // This will be handled by Livewire cart dropdown component
     document.dispatchEvent(new CustomEvent('cartUpdated'));
 }
 
@@ -1123,8 +1215,6 @@ function showNotification(type, message) {
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
-
-
 
 // Add notification styles
 const style = document.createElement('style');

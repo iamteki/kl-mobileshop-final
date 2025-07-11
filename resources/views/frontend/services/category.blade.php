@@ -25,12 +25,12 @@
         <div class="row align-items-center">
             <div class="col-lg-8">
                 <div class="d-flex align-items-center mb-3">
-                    <div class="category-icon-large me-3">
+                    <div class="category-icon-large me-4">
                         <i class="{{ $category->icon }}"></i>
                     </div>
                     <div>
-                        <h1 class="mb-2">{{ $category->name }}</h1>
-                        <p class="text-muted mb-0">{{ $category->description }}</p>
+                        <h1 class="category-title mb-2">{{ $category->name }}</h1>
+                        <p class="category-description mb-0">{{ $category->description }}</p>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="sort-bar mb-4">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <p class="mb-0">Showing {{ $providers->firstItem() ?? 0 }}-{{ $providers->lastItem() ?? 0 }} of {{ $providers->total() }} providers</p>
+                            <p class="results-count mb-0">Showing {{ $providers->firstItem() ?? 0 }}-{{ $providers->lastItem() ?? 0 }} of {{ $providers->total() }} providers</p>
                         </div>
                         <div class="col-md-6">
                             <form action="{{ route('services.category', $category->slug) }}" method="GET" id="sortForm">
@@ -74,7 +74,7 @@
                                 @endforeach
                                 
                                 <div class="d-flex align-items-center justify-content-md-end">
-                                    <label class="me-2 text-nowrap">Sort by:</label>
+                                    <label class="sort-label me-2 text-nowrap">Sort by:</label>
                                     <select name="sort" class="form-select" onchange="document.getElementById('sortForm').submit()">
                                         <option value="featured" {{ request('sort') == 'featured' ? 'selected' : '' }}>Featured</option>
                                         <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>Highest Rated</option>
@@ -96,10 +96,10 @@
                         </div>
                     @empty
                         <div class="col-12">
-                            <div class="text-center py-5">
+                            <div class="empty-state text-center py-5">
                                 <i class="fas fa-users fa-4x text-muted mb-3"></i>
-                                <h3 class="text-muted">No providers found</h3>
-                                <p class="text-muted">Try adjusting your filters or check back later.</p>
+                                <h3 class="empty-title">No providers found</h3>
+                                <p class="empty-text">Try adjusting your filters or check back later.</p>
                                 <a href="{{ route('services.index') }}" class="btn btn-primary mt-3">
                                     Browse All Services
                                 </a>
@@ -121,32 +121,75 @@
 
 @push('styles')
 <style>
+/* Import Bebas Neue font */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 /* Category Header */
 .category-header {
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
     border-bottom: 1px solid var(--border-dark);
 }
 
 .category-icon-large {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
-    border-radius: 20px;
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+    border-radius: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
+    transition: all 0.3s;
+}
+
+.category-icon-large:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(147, 51, 234, 0.3);
 }
 
 .category-icon-large i {
-    font-size: 36px;
+    font-size: 40px;
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+/* Typography */
+.category-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    line-height: 1;
+}
+
+.category-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-gray);
+    font-weight: 400;
+}
+
+.empty-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-gray);
+    margin-bottom: 1rem;
+}
+
+.empty-text {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-gray);
+    font-size: 1rem;
+}
+
+/* Stats */
 .category-stats {
     display: flex;
-    gap: 30px;
+    gap: 40px;
     justify-content: flex-end;
 }
 
@@ -156,15 +199,24 @@
 
 .stat-value {
     display: block;
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--primary-purple);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
 }
 
 .stat-label {
     display: block;
-    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
     color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-top: 0.25rem;
 }
 
 /* Providers Section */
@@ -176,13 +228,50 @@
 /* Sort Bar */
 .sort-bar {
     background: var(--bg-card);
-    padding: 20px;
-    border-radius: 15px;
+    padding: 25px;
+    border-radius: 20px;
     border: 1px solid var(--border-dark);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.results-count {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.sort-label {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 0.875rem;
 }
 
 .sort-bar .form-select {
-    max-width: 200px;
+    max-width: 220px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.sort-bar .form-select:focus {
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
+}
+
+/* Empty State */
+.empty-state {
+    padding: 80px 20px;
+}
+
+.empty-state i {
+    opacity: 0.3;
 }
 
 /* Responsive */
@@ -191,8 +280,67 @@
         justify-content: flex-start;
         margin-top: 20px;
     }
+    
+    .category-title {
+        font-size: 2.5rem;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
 }
 
+@media (max-width: 768px) {
+    .category-title {
+        font-size: 2rem;
+    }
+    
+    .category-icon-large {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .category-icon-large i {
+        font-size: 30px;
+    }
+}
+
+/* Pagination Custom Styles */
+.pagination {
+    justify-content: center;
+}
+
+.page-link {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    padding: 10px 20px;
+    margin: 0 3px;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.page-link:hover {
+    background-color: var(--primary-purple);
+    border-color: var(--primary-purple);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(147, 51, 234, 0.3);
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
+    border-color: transparent;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    background-color: var(--bg-dark);
+    color: var(--text-gray);
+    opacity: 0.5;
+}
 </style>
 @endpush
 

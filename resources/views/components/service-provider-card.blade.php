@@ -36,7 +36,7 @@
             @endif
         </div>
         
-        <p class="provider-bio">{{ Str::limit($provider->bio, 100) }}</p>
+        <p class="provider-bio">{!! Str::limit(strip_tags($provider->bio), 100) !!}</p>
         
         <div class="provider-details">
             @if($provider->experience_level)
@@ -78,8 +78,11 @@
         <div class="provider-footer">
             <div class="provider-price">
                 <span class="price-label">From</span>
-                <span class="price-value">LKR {{ number_format($provider->base_price) }}</span>
-                <span class="price-unit">/{{ $provider->price_unit }}</span>
+                <div class="price-amount">
+                    <span class="currency">LKR</span>
+                    <span class="amount">{{ number_format($provider->base_price) }}</span>
+                    <span class="price-unit">/{{ $provider->price_unit }}</span>
+                </div>
             </div>
             
             @if($showBookButton)
@@ -93,30 +96,33 @@
 </div>
 
 <style>
+/* Import Bebas Neue font */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 .provider-card {
     background: var(--bg-card);
-    border-radius: 20px;
+    border-radius: 25px;
     overflow: hidden;
     transition: all 0.3s;
     border: 1px solid var(--border-dark);
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    min-height: 520px;
 }
 
 .provider-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(147, 51, 234, 0.2);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
     border-color: var(--primary-purple);
-    cursor: pointer;
 }
 
 .provider-image {
-    height: 200px;
+    height: 240px;
     position: relative;
     overflow: hidden;
     background-color: var(--bg-darker);
-    cursor: pointer;
 }
 
 .provider-image img {
@@ -127,21 +133,23 @@
 }
 
 .provider-card:hover .provider-image img {
-    transform: scale(1.05);
-    cursor: pointer;
+    transform: scale(1.1);
 }
 
 .provider-badge {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
-    padding: 5px 15px;
+    padding: 6px 18px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
     backdrop-filter: blur(10px);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .featured-badge {
@@ -150,17 +158,22 @@
     left: 15px;
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
     color: white;
-    padding: 5px 15px;
+    padding: 6px 18px;
     border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    box-shadow: 0 5px 15px rgba(147, 51, 234, 0.3);
 }
 
 .provider-info {
-    padding: 25px;
+    padding: 30px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .provider-header {
@@ -168,72 +181,88 @@
 }
 
 .provider-name {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 5px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
     color: var(--text-light);
+    line-height: 1;
 }
 
 .provider-rating {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .rating-value {
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
     color: var(--text-light);
     margin-left: 5px;
 }
 
 .review-count {
+    font-family: 'Inter', sans-serif;
     color: var(--text-gray);
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .provider-bio {
+    font-family: 'Inter', sans-serif;
     color: var(--text-gray);
-    font-size: 14px;
-    margin-bottom: 15px;
+    font-size: 0.875rem;
+    margin-bottom: 20px;
     line-height: 1.6;
+    min-height: 48px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .provider-details {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     color: var(--text-gray);
-    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
 
 .detail-item i {
     color: var(--primary-purple);
-    font-size: 12px;
+    font-size: 0.875rem;
 }
 
 .provider-specialties {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .specialty-tag {
     background: rgba(147, 51, 234, 0.1);
     color: var(--primary-purple);
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 15px;
-    font-size: 12px;
-    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
     border: 1px solid rgba(147, 51, 234, 0.2);
+    transition: all 0.3s;
 }
 
 .provider-footer {
@@ -241,7 +270,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 25px;
     border-top: 1px solid var(--border-dark);
 }
 
@@ -251,20 +280,83 @@
 }
 
 .price-label {
-    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
     color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
-.price-value {
-    font-size: 20px;
+.price-amount {
+    display: flex;
+    align-items: baseline;
+}
+
+.currency {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    margin-right: 4px;
+}
+
+.amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.price-unit {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-gray);
+    margin-left: 2px;
+}
+
+/* Button Styling */
+.provider-card .btn-primary {
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 0.75rem;
+    padding: 10px 20px;
+}
+
+/* Hover Effects */
+.provider-card:hover .specialty-tag {
+    background: rgba(147, 51, 234, 0.15);
+}
+
+.provider-card:hover .provider-name {
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.price-unit {
-    font-size: 12px;
-    color: var(--text-gray);
+/* Responsive */
+@media (max-width: 1400px) {
+    .provider-card {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .provider-card {
+        min-height: auto;
+    }
+    
+    .provider-image {
+        height: 200px;
+    }
+    
+    .provider-info {
+        padding: 25px;
+    }
 }
 </style>
