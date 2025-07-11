@@ -50,10 +50,12 @@
     }
 
     .hero-title {
-        font-size: 48px;
-        font-weight: 800;
-        margin-bottom: 20px;
-        line-height: 1.2;
+
+           font-family: 'Bebas Neue', sans-serif !important;
+    font-size: clamp(3rem, 4vw, 4rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 0.9
     }
 
     .hero-title span {

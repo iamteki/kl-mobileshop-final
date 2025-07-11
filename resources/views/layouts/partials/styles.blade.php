@@ -6,6 +6,11 @@
 
 <style>
     :root {
+
+         /* Font Families */
+        --font-heading: 'Bebas Neue', 'Arial Black', sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
         --primary-purple: #9333EA;
         --secondary-purple: #C084FC;
         --accent-violet: #7C3AED;

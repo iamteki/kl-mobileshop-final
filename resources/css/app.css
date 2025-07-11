@@ -10,6 +10,12 @@
 
 /* CSS Variables */
 :root {
+
+    /* Font Families */
+    --font-heading: 'Bebas Neue', 'Arial Black', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+
     --primary-purple: #9333EA;
     --secondary-purple: #C084FC;
     --accent-violet: #7C3AED;
@@ -60,7 +66,8 @@ html {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    font-family: var(--font-body);
     background-color: var(--bg-black);
     color: var(--text-light);
     line-height: 1.6;
@@ -70,17 +77,107 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    line-height: 1.2;
+      font-family: var(--font-heading);
+    font-weight: 400; /* Bebas Neue only has regular weight */
+    line-height: 1.1;
     margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase; /* Bebas Neue looks great in uppercase */
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
-h5 { font-size: 1.25rem; }
-h6 { font-size: 1rem; }
+h1 { 
+    font-size: 3.5rem;
+    letter-spacing: 1px;
+}
+h2 { 
+    font-size: 2.75rem;
+    letter-spacing: 0.8px;
+}
+h3 { 
+    font-size: 2.25rem;
+    letter-spacing: 0.6px;
+}
+h4 { 
+    font-size: 1.875rem;
+    letter-spacing: 0.5px;
+}
+h5 { 
+    font-size: 1.5rem;
+    letter-spacing: 0.4px;
+}
+h6 { 
+    font-size: 1.25rem;
+    letter-spacing: 0.3px;
+}
+
+/* Special Classes for Bebas Neue */
+.bebas-heading {
+    font-family: var(--font-heading) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand {
+    font-family: var(--font-heading) !important;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--primary-purple) !important;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Buttons with Bebas Neue */
+.btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+
+.btn-lg {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.125rem;
+}
+
+/* Hero Title */
+.hero-title {
+    font-family: var(--font-heading) !important;
+    font-size: 4rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Section Titles */
+.section-title {
+    font-family: var(--font-heading) !important;
+    font-size: 3rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* Card Titles */
+.card-title {
+    font-family: var(--font-heading) !important;
+    font-size: 1.75rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Product Names */
+.product-title {
+    font-family: var(--font-heading) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Price Display */
+.price-display,
+.price-value {
+    font-family: var(--font-heading) !important;
+    letter-spacing: 0.5px;
+}
+
+
 
 p {
     margin-bottom: 1rem;
