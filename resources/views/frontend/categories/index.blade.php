@@ -12,7 +12,7 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container text-center">
-            <h1 class="text-white mb-3">Equipment Categories</h1>
+            <h1 class="page-title">Equipment <span>Categories</span></h1>
             <p class="text-muted lead">Everything you need for successful events</p>
         </div>
     </section>
@@ -49,9 +49,9 @@
     <!-- CTA Section -->
     <section class="category-cta">
         <div class="container text-center">
-            <h2 class="text-white mb-4">Can't find what you're looking for?</h2>
+            <h2 class="section-title-styled">Can't find what you're <span>looking for?</span></h2>
             <p class="text-muted mb-4">Contact our team for custom equipment solutions</p>
-            <a href="{{ route('contact') }}" class="btn btn-primary">
+            <a href="{{ route('contact') }}" class="btn btn-primary btn-lg">
                 <i class="fas fa-phone me-2"></i>Contact Us
             </a>
         </div>
@@ -67,6 +67,23 @@
     background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
     padding: 60px 0;
     margin-bottom: 40px;
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    line-height: 1;
+}
+
+.page-title span {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .categories-page {
@@ -105,13 +122,17 @@
 }
 
 .category-name {
+    font-family: var(--font-heading);
     color: var(--text-light);
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 400;
     margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .category-description {
+    font-family: var(--font-body);
     color: var(--text-gray);
     margin-bottom: 20px;
     line-height: 1.6;
@@ -126,11 +147,13 @@
 }
 
 .product-count {
+    font-family: var(--font-body);
     color: var(--primary-purple);
     font-weight: 600;
 }
 
 .view-arrow {
+    font-family: var(--font-body);
     color: var(--text-gray);
     font-size: 14px;
     transition: all 0.3s ease;
@@ -146,7 +169,32 @@
     padding: 80px 0;
 }
 
+.section-title-styled {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.section-title-styled span {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 @media (max-width: 768px) {
+    .page-title {
+        font-size: 2.5rem;
+    }
+    
+    .section-title-styled {
+        font-size: 2rem;
+    }
+    
     .category-link {
         padding: 25px;
     }
@@ -156,7 +204,7 @@
     }
     
     .category-name {
-        font-size: 20px;
+        font-size: 1.5rem;
     }
 }
 </style>

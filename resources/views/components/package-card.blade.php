@@ -8,9 +8,11 @@
         <span class="package-badge">{{ $package->badge }}</span>
     @endif
     
-    <h4>{{ $package->name }}</h4>
-    <div class="package-price">LKR {{ number_format($package->price) }}</div>
-    <p class="text-muted">{{ $package->description }}</p>
+    <h4 class="package-name">{{ $package->name }}</h4>
+    <div class="package-price">
+        <span class="price-amount">LKR {{ number_format($package->price) }}</span>
+    </div>
+    <p class="package-description text-muted">{{ $package->description }}</p>
     
     <ul class="package-features">
         @foreach($package->features as $feature)
@@ -21,7 +23,7 @@
         @endforeach
     </ul>
     
-    <button class="btn {{ $featured ? 'btn-primary' : 'btn-outline-primary' }} w-100"
+    <button class="btn {{ $featured ? 'btn-primary' : 'btn-outline-primary' }} w-100 btn-lg"
             onclick="window.location.href='{{ route('package.show', $package->slug) }}'">
         Select Package
     </button>
@@ -64,21 +66,39 @@
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
+    font-family: var(--font-body);
 }
 
-.package-card h4 {
+.package-name {
+    font-family: var(--font-heading);
     color: var(--text-light);
-    font-weight: 700;
+    font-weight: 400;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 20px;
+    line-height: 1.1;
 }
 
 .package-price {
-    font-size: 36px;
-    font-weight: 800;
+    margin: 20px 0;
+}
+
+.price-amount {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 400;
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 20px 0;
+    letter-spacing: 1px;
+}
+
+.package-description {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
 }
 
 .package-features {
@@ -87,6 +107,7 @@
     margin: 30px 0;
     text-align: left;
     flex-grow: 1;
+    font-family: var(--font-body);
 }
 
 .package-features li {
@@ -104,9 +125,21 @@
     margin-right: 10px;
 }
 
+/* Button styling with Bebas is handled by btn-lg class in your CSS */
+
 @media (max-width: 991px) {
     .package-card.featured {
         transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .package-name {
+        font-size: 1.75rem;
+    }
+    
+    .price-amount {
+        font-size: 2.5rem;
     }
 }
 </style>

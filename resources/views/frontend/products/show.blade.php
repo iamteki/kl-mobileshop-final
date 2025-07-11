@@ -34,12 +34,14 @@
 
         <!-- Product Tabs -->
         @include('frontend.products.partials.tabs')
-
-        <!-- Related Products -->
-        @if($relatedProducts->count() > 0)
-            @include('frontend.products.partials.related')
-        @endif
     </div>
+
+    <!-- Related Products - Outside Container -->
+    @if($relatedProducts->count() > 0)
+        <section class="related-products-section">
+            @include('frontend.products.partials.related')
+        </section>
+    @endif
 
     <!-- Quick View Modal (if needed) -->
     @include('frontend.products.partials.quick-view-modal')

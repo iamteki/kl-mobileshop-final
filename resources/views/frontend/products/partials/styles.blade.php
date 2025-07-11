@@ -29,6 +29,16 @@
     gap: 10px;
 }
 
+.badge-custom {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-body);
+}
+
 .zoom-hint {
     position: absolute;
     bottom: 20px;
@@ -41,6 +51,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    font-family: var(--font-body);
 }
 
 .thumbnail-container {
@@ -83,13 +94,19 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 10px;
+    font-family: var(--font-body);
+    font-weight: 600;
 }
 
 .product-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
     color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1;
 }
 
 .product-meta {
@@ -103,6 +120,7 @@
 .sku {
     color: var(--text-gray);
     font-size: 14px;
+    font-family: var(--font-body);
 }
 
 .availability-status {
@@ -110,6 +128,7 @@
     align-items: center;
     gap: 8px;
     font-weight: 600;
+    font-family: var(--font-body);
 }
 
 .availability-status.in-stock {
@@ -124,6 +143,11 @@
     color: var(--danger-red);
 }
 
+.product-description {
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
 /* Pricing Section */
 .pricing-section {
     background: var(--bg-card);
@@ -133,19 +157,11 @@
     border: 1px solid var(--border-dark);
 }
 
-.price-display {
-    font-size: 36px;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-}
-
 .price-note {
     color: var(--text-gray);
     font-size: 14px;
     margin-bottom: 20px;
+    font-family: var(--font-body);
 }
 
 .pricing-tiers {
@@ -171,21 +187,19 @@
 }
 
 .tier-days {
-    font-size: 14px;
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
     color: var(--text-gray);
     margin-bottom: 5px;
-}
-
-.tier-price {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--secondary-purple);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .tier-save {
     font-size: 12px;
     color: var(--success-green);
     margin-top: 5px;
+    font-family: var(--font-body);
 }
 
 /* Tabs Section */
@@ -199,12 +213,16 @@
 }
 
 .nav-tabs .nav-link {
+    font-family: var(--font-heading);
     color: var(--text-gray);
     border: none;
     padding: 15px 0;
-    font-weight: 600;
+    font-weight: 400;
+    font-size: 1.25rem;
     position: relative;
     transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .nav-tabs .nav-link:hover {
@@ -232,42 +250,67 @@
     padding: 30px 0;
 }
 
+/* Tab Content Headings */
+.tab-pane h5 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
 /* Specifications Table */
 .specs-table {
-    background: var(--bg-card);
-    border-radius: 15px;
-    overflow: hidden;
-    border: 1px solid var(--border-dark);
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+    border: none;
 }
 
 .specs-table table {
     width: 100%;
-    border-collapse: collapse;
-}
-
-.specs-table th,
-.specs-table td {
-    padding: 15px 20px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-dark);
+    border-collapse: separate;
+    border-spacing: 0 8px;
 }
 
 .specs-table th {
-    background: var(--bg-dark);
-    color: var(--text-gray);
-    font-weight: 600;
-    font-size: 14px;
+    font-family: var(--font-heading);
+    background: transparent;
+    color: var(--text-light);
+    font-weight: 400;
+    font-size: 2rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    padding: 0 0 20px 0;
+    border: none;
+    text-align: left;
 }
 
-.specs-table td:first-child {
+.specs-table td {
+    font-family: var(--font-body);
+    background: var(--bg-card);
+    padding: 20px 25px;
+    border: 1px solid var(--border-dark);
+}
+
+.specs-table tr td:first-child {
     color: var(--text-gray);
     width: 40%;
+    border-radius: 10px 0 0 10px;
+    font-weight: 600;
 }
 
-.specs-table tr:last-child td {
-    border-bottom: none;
+.specs-table tr td:last-child {
+    color: var(--text-light);
+    border-radius: 0 10px 10px 0;
+    border-left: none;
+}
+
+.specs-table tbody tr:hover td {
+    background: var(--bg-card-hover);
+    border-color: var(--primary-purple);
 }
 
 /* Features Grid */
@@ -303,19 +346,43 @@
 }
 
 .feature-content h6 {
+    font-family: var(--font-heading);
     color: var(--text-light);
     margin-bottom: 5px;
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .feature-content p {
     color: var(--text-gray);
     font-size: 14px;
     margin: 0;
+    font-family: var(--font-body);
 }
 
 /* Related Products */
-.related-products {
+.related-products-section {
+    width: 100%;
+    margin: 0;
+    padding: 0;
     margin-top: 80px;
+}
+
+/* Remove the old related products styles that were too large */
+
+/* Lists styling */
+.features-list,
+.requirements-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li,
+.requirements-list li {
+    padding: 10px 0;
+    font-family: var(--font-body);
+    color: var(--text-gray);
 }
 
 /* Responsive */
@@ -331,15 +398,23 @@
 
 @media (max-width: 768px) {
     .product-title {
-        font-size: 24px;
-    }
-
-    .price-display {
-        font-size: 28px;
+        font-size: 2.5rem;
     }
 
     .pricing-tiers {
         flex-direction: column;
+    }
+    
+    .nav-tabs .nav-link {
+        font-size: 1rem;
+    }
+    
+    .tab-pane h5 {
+        font-size: 1.25rem;
+    }
+    
+    .related-title {
+        font-size: 2.5rem;
     }
 }
 </style>

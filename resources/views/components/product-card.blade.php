@@ -48,10 +48,10 @@
         @endif
         
         <div class="product-footer">
-            <div class="product-price">
-                LKR {{ number_format($product->base_price) }}
-                <small>/{{ $product->price_unit ?? 'day' }}</small>
-            </div>
+            <x-price-display 
+                :amount="$product->base_price" 
+                :period="$product->price_unit ?? 'day'"
+                size="small" />
             
             @if($showQuickAdd)
                 <div class="product-actions">
@@ -138,6 +138,7 @@
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
+    font-family: var(--font-body);
 }
 
 .availability-badge {
@@ -149,6 +150,8 @@
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
+    font-family: var(--font-body);
+    font-weight: 600;
 }
 
 .availability-badge.in-stock {
@@ -175,16 +178,22 @@
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-family: var(--font-body);
+    font-weight: 600;
 }
 
 .product-title {
+    font-family: var(--font-heading);
     color: var(--text-light);
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 12px;
     text-decoration: none;
     transition: color 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 .product-title:hover {
@@ -196,6 +205,7 @@
     padding: 0;
     margin-bottom: 15px;
     flex-grow: 1;
+    font-family: var(--font-body);
 }
 
 .product-specs li {
@@ -217,19 +227,6 @@
     margin-top: auto;
     padding-top: 15px;
     border-top: 1px solid var(--border-dark);
-}
-
-.product-price {
-    font-size: 24px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.product-price small {
-    font-size: 14px;
-    color: var(--text-gray);
 }
 
 .product-actions {
@@ -268,6 +265,22 @@
     border-color: var(--border-dark);
     color: var(--text-gray);
     transform: none;
+}
+
+.btn-icon.btn-success {
+    background-color: var(--success-green);
+    border-color: var(--success-green);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .product-title {
+        font-size: 1.25rem;
+    }
+    
+    .price-amount {
+        font-size: 1.5rem;
+    }
 }
 </style>
 

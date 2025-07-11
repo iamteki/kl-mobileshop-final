@@ -42,13 +42,17 @@
 }
 
 .category-name {
+    font-family: var(--font-heading);
     color: var(--text-light);
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 400;
     margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .category-count {
+    font-family: var(--font-body);
     color: var(--text-gray);
     font-size: 14px;
     margin: 0;
@@ -64,7 +68,7 @@
     }
     
     .category-name {
-        font-size: 16px;
+        font-size: 1.25rem;
     }
 }
 </style>

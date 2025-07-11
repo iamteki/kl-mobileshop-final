@@ -176,12 +176,13 @@
 }
 
 .filter-group h6 {
+    font-family: var(--font-heading);
     color: var(--text-light);
-    font-weight: 600;
+    font-weight: 200;
     margin-bottom: 15px;
     text-transform: uppercase;
-    font-size: 13px;
-    letter-spacing: 1px;
+    font-size: 1.125rem;
+    letter-spacing: 2px;
     border-bottom: 1px solid var(--border-dark);
     padding-bottom: 10px;
 }

@@ -14,7 +14,7 @@
     <section class="category-header">
         <div class="container text-center">
             <i class="{{ $category->icon }} category-icon"></i>
-            <h1 class="text-white mb-3">{{ $category->name }} Rental</h1>
+            <h1 class="page-title">{{ $category->name }} <span>Rental</span></h1>
             <p class="text-muted lead">{{ $category->description ?? 'Professional equipment for events of all sizes' }}</p>
         </div>
     </section>
@@ -64,6 +64,23 @@
     margin-bottom: 20px;
 }
 
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    line-height: 1;
+}
+
+.page-title span {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 /* Main Layout Structure */
 .container.my-5 {
     margin-top: 3rem !important;
@@ -102,6 +119,16 @@
     
     .category-icon {
         font-size: 36px;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
     }
 }
 </style>

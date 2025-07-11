@@ -499,5 +499,44 @@
             margin-bottom: 20px;
         }
     }
+
+    /* Section Title - Smaller than hero but still impactful */
+.section-title-styled {
+    font-family: var(--font-heading) !important;
+    font-size: 3rem; /* Smaller than hero-title (4rem) */
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    font-weight: 400;
+}
+
+/* Purple gradient for last word */
+.section-title-styled span {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Even smaller for search section */
+.search-section .section-title-styled {
+    font-size: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-title-styled {
+        font-size: 2rem;
+    }
+    
+    .search-section .section-title-styled {
+        font-size: 1.75rem;
+    }
+}
+
+
+
+
 </style>
 

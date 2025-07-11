@@ -1,7 +1,9 @@
 <section class="package-section" id="packages">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white">Event Packages</h2>
+            <h2 class="section-title-styled">
+                Event <span>Packages</span>
+            </h2>
             <p class="text-muted">Complete solutions for your events</p>
         </div>
         
@@ -14,7 +16,7 @@
         </div>
         
         <div class="text-center mt-5">
-            <a href="{{ route('packages.index') }}" class="btn btn-primary">
+            <a href="{{ route('packages.index') }}" class="btn btn-primary btn-lg">
                 BROWSE ALL PACKAGES <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>

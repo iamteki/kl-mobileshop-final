@@ -1,7 +1,9 @@
 <section class="how-it-works">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white">How It Works</h2>
+            <h2 class="section-title-styled">
+                How It <span>Works</span>
+            </h2>
             <p class="text-muted">Simple booking process with instant confirmation</p>
         </div>
         
@@ -38,8 +40,6 @@
                 <p class="text-muted">We deliver and set up everything at your venue</p>
             </div>
         </div>
-        
-        
     </div>
 </section>
 

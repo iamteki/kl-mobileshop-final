@@ -26,7 +26,9 @@
 
     <!-- Pricing Section -->
     <div class="pricing-section">
-        <div class="price-display">LKR {{ number_format($product->base_price) }}</div>
+        <x-price-display 
+            :amount="$product->base_price" 
+            size="large" />
         <div class="price-note">Per day rental • Minimum 1 day</div>
         
         @if(count($pricingTiers) > 0)
@@ -34,7 +36,13 @@
                 @foreach($pricingTiers as $tier)
                     <div class="tier-card">
                         <div class="tier-days">{{ $tier['days'] }}</div>
-                        <div class="tier-price">LKR {{ number_format($tier['price']) }}/day</div>
+                        <div class="tier-price">
+                            <x-price-display 
+                                :amount="$tier['price']" 
+                                period="day"
+                                size="small"
+                                :showCurrency="false" />
+                        </div>
                         @if($tier['savings'] > 0)
                             <div class="tier-save">Save {{ $tier['savings'] }}%</div>
                         @endif
@@ -61,3 +69,25 @@
         </small>
     </div>
 </div>
+
+@push('styles')
+<style>
+/* Override to ensure product title is properly sized */
+.product-title {
+    font-family: var(--font-heading) !important;
+    font-size: 3.5rem !important;
+    font-weight: 400 !important;
+    margin-bottom: 20px !important;
+    color: var(--text-light) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    line-height: 1 !important;
+}
+
+@media (max-width: 768px) {
+    .product-title {
+        font-size: 2.5rem !important;
+    }
+}
+</style>
+@endpush

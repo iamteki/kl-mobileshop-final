@@ -1,7 +1,9 @@
 <section class="product-section">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white">Popular Equipment</h2>
+            <h2 class="section-title-styled">
+                Popular <span>Equipment</span>
+            </h2>
             <p class="text-muted">Most rented items this month</p>
         </div>
         
@@ -14,7 +16,7 @@
         </div>
         
         <div class="text-center mt-5">
-            <a href="{{ route('categories.index') }}" class="btn btn-primary">
+            <a href="{{ route('categories.index') }}" class="btn btn-primary btn-lg">
                 Browse All Equipment <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>

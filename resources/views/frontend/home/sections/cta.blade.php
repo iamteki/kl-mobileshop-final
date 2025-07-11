@@ -1,6 +1,6 @@
 <section class="cta-section">
     <div class="container">
-        <h2 class="position-relative" style="z-index: 1;">Need Help Planning Your Event?</h2>
+        <h2 class="hero-title position-relative mb-4" style="z-index: 1;">Need Help Planning Your Event?</h2>
         <p class="lead mb-4 position-relative" style="z-index: 1; color: rgba(255,255,255,0.9);">
             Our experts are here to help you choose the right equipment and services
         </p>

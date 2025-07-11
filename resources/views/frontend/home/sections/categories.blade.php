@@ -1,7 +1,9 @@
 <section class="category-section">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white">Equipment Categories</h2>
+            <h2 class="section-title-styled">
+                Equipment <span>Categories</span>
+            </h2>
             <p class="text-muted">Browse our extensive inventory of professional event equipment</p>
         </div>
         
@@ -14,7 +16,7 @@
         </div>
         
         <div class="text-center mt-5">
-            <a href="{{ route('categories.index') }}" class="btn btn-primary">
+            <a href="{{ route('categories.index') }}" class="btn btn-primary btn-lg">
                 View All Categories <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>
