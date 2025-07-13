@@ -21,23 +21,19 @@
             </div>
         </div>
 
-        <div class="quantity-selector">
-            <label>Quantity:</label>
-            <div class="quantity-controls">
-                <button class="qty-btn" wire:click="decrementQuantity">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <input type="number" 
-                       class="qty-input" 
-                       wire:model.live="quantity" 
-                       min="1" 
-                       max="{{ $product->max_quantity ?? 10 }}">
-                <button class="qty-btn" wire:click="incrementQuantity">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            <span class="max-available">({{ $product->available_quantity }} available)</span>
-        </div>
+      <div class="quantity-selector">
+    <label>Quantity:</label>
+    <div class="quantity-controls">
+        <button type="button" class="qty-btn" wire:click="decrementQuantity">
+            <i class="fas fa-minus"></i>
+        </button>
+        <span class="qty-input">{{ $quantity }}</span>
+        <button type="button" class="qty-btn" wire:click="incrementQuantity">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+    <span class="max-available">({{ $product->available_quantity }} available)</span>
+</div>
         
         @if($calculatedPrice)
             <div class="price-summary mt-4 p-3 bg-dark rounded">
@@ -58,11 +54,11 @@
         @endif
         
         @if($availabilityMessage)
-            <div class="alert alert-{{ $isAvailable ? 'success' : 'warning' }} mt-3">
-                <i class="fas fa-{{ $isAvailable ? 'check' : 'exclamation' }}-circle me-2"></i>
-                {{ $availabilityMessage }}
-            </div>
-        @endif
+    <div class="availability-success">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ $availabilityMessage }}</span>
+    </div>
+@endif
         
         @error('availability')
             <div class="alert alert-danger mt-3">
@@ -101,10 +97,6 @@
             <span wire:loading wire:target="bookNow">
                 Processing...
             </span>
-        </button>
-        
-        <button class="btn-icon" title="Add to Wishlist">
-            <i class="far fa-heart"></i>
         </button>
     </div>
 
@@ -277,5 +269,79 @@
             width: 100%;
         }
     }
+
+    /* Date picker icon styling */
+.form-control[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+/* For Firefox */
+.form-control[type="date"] {
+    color-scheme: dark;
+}
+
+/* Alert/Toast Styling */
+.alert {
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.alert-success {
+    background: rgba(147, 51, 234, 0.15);
+    color: var(--primary-purple);
+    border: 1px solid rgba(147, 51, 234, 0.3);
+}
+
+.alert-warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.alert i {
+    font-size: 18px;
+    margin-right: 12px;
+}
+
+/* Success alert specific styling with purple theme */
+.availability-success {
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(196, 132, 252, 0.1) 100%);
+    border: 1px solid rgba(147, 51, 234, 0.4);
+    color: var(--text-light);
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.availability-success::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-purple);
+}
+
+.availability-success i {
+    color: var(--primary-purple);
+    font-size: 20px;
+    margin-right: 15px;
+}
     </style>
 </div>
