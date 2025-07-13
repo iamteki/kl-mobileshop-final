@@ -291,6 +291,9 @@
 
 @push('styles')
 <style>
+    /* Import Bebas Neue font */
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
     .auth-wrapper {
         min-height: calc(100vh - 200px);
         padding: 60px 0;
@@ -300,70 +303,112 @@
     .auth-card {
         background: var(--bg-card);
         border: 1px solid var(--border-dark);
-        border-radius: 15px;
-        padding: 40px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .auth-title {
-        color: var(--primary-purple);
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 10px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 3rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
     }
 
     .auth-subtitle {
-        color: var(--text-secondary);
+        font-family: 'Inter', sans-serif;
+        color: var(--text-gray);
         font-size: 1rem;
+        font-weight: 400;
     }
 
     .account-type-selector .btn-outline-primary {
         background: var(--bg-dark);
         border: 2px solid var(--border-dark);
-        color: var(--text-secondary);
-        padding: 20px;
+        color: var(--text-gray);
+        padding: 25px;
         transition: all 0.3s ease;
+        border-radius: 15px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .account-type-selector .btn-outline-primary:hover {
+        border-color: var(--primary-purple);
+        color: var(--primary-purple);
+        background: rgba(147, 51, 234, 0.1);
+        transform: translateY(-2px);
     }
 
     .account-type-selector .btn-check:checked + .btn-outline-primary {
-        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-        border-color: var(--primary-purple);
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
+        border-color: transparent;
         color: white;
+        box-shadow: 0 10px 25px rgba(147, 51, 234, 0.3);
     }
 
     .account-type-selector .btn-outline-primary i {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         display: block;
     }
 
     .form-label {
-        color: var(--text-primary);
-        font-weight: 500;
-        margin-bottom: 8px;
+        font-family: 'Inter', sans-serif;
+        color: var(--text-light);
+        font-weight: 600;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 0.875rem;
     }
 
     .input-group-text {
         background: var(--bg-dark);
         border: 1px solid var(--border-dark);
         color: var(--primary-purple);
+        padding: 14px 18px;
     }
 
     .form-control {
         background: var(--bg-dark);
         border: 1px solid var(--border-dark);
-        color: var(--text-primary);
-        padding: 12px 15px;
+        color: var(--text-light);
+        padding: 14px 18px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 1rem;
     }
 
     .form-control:focus {
         background: var(--bg-dark);
         border-color: var(--primary-purple);
-        color: var(--text-primary);
+        color: var(--text-light);
         box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
     }
 
     .form-control::placeholder {
-        color: var(--text-secondary);
+        color: #6B7280;
+        opacity: 1;
+    }
+
+    /* Autofill styles */
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover, 
+    .form-control:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+        background-color: var(--bg-dark) !important;
+        -webkit-box-shadow: 0 0 0px 1000px var(--bg-dark) inset !important;
+        -webkit-text-fill-color: var(--text-light) !important;
+        transition: background-color 5000s ease-in-out 0s;
+        border: 1px solid var(--border-dark) !important;
     }
 
     textarea.form-control {
@@ -373,7 +418,9 @@
     .toggle-password {
         background: var(--bg-dark);
         border: 1px solid var(--border-dark);
-        color: var(--text-secondary);
+        color: var(--text-gray);
+        padding: 14px 18px;
+        transition: all 0.3s;
     }
 
     .toggle-password:hover {
@@ -382,9 +429,18 @@
         color: var(--primary-purple);
     }
 
+    .toggle-password:focus {
+        box-shadow: none;
+        border-color: var(--primary-purple);
+    }
+
     .form-check-input {
         background-color: var(--bg-dark);
         border-color: var(--border-dark);
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-top: 0.25rem;
     }
 
     .form-check-input:checked {
@@ -392,52 +448,76 @@
         border-color: var(--primary-purple);
     }
 
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
+    }
+
     .form-check-label {
-        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        color: var(--text-gray);
+        font-weight: 500;
+        cursor: pointer;
+        margin-left: 8px;
     }
 
     .form-check-label a {
         color: var(--primary-purple);
         text-decoration: none;
+        font-weight: 600;
     }
 
     .form-check-label a:hover {
-        text-decoration: underline;
+        color: var(--secondary-purple);
+        text-decoration: none;
     }
 
     .login-link {
+        font-family: 'Inter', sans-serif;
         color: var(--primary-purple);
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
+        transition: all 0.3s;
     }
 
     .login-link:hover {
         color: var(--secondary-purple);
-        text-decoration: underline;
+        text-decoration: none;
+        transform: translateX(2px);
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-violet) 100%);
         border: none;
-        padding: 12px 30px;
-        font-weight: 600;
+        padding: 14px 30px;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.05em;
+        font-size: 0.9rem;
+        border-radius: 12px;
+        transition: all 0.3s;
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(147, 51, 234, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(147, 51, 234, 0.4);
+        background: linear-gradient(135deg, var(--accent-violet) 0%, var(--primary-purple) 100%);
+    }
+
+    .btn-primary:active {
+        transform: translateY(-1px);
     }
 
     .alert {
         background: var(--bg-dark);
         border: 1px solid;
-        color: var(--text-primary);
+        color: var(--text-light);
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
     }
 
     .alert-danger {
-        border-color: var(--danger);
+        border-color: var(--danger-red);
         background: rgba(239, 68, 68, 0.1);
     }
 
@@ -446,33 +526,52 @@
         background: rgba(147, 51, 234, 0.1);
     }
 
+    .btn-close {
+        filter: invert(1);
+        opacity: 0.8;
+    }
+
+    .invalid-feedback {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
     .auth-footer {
-        color: var(--text-secondary);
+        font-family: 'Inter', sans-serif;
+        color: var(--text-gray);
     }
 
     .auth-footer a {
-        color: var(--text-secondary);
+        color: var(--text-gray);
+        transition: all 0.3s;
     }
 
     .auth-footer a:hover {
         color: var(--primary-purple);
+        transform: translateX(-5px);
+    }
+
+    /* Remove blue outline on focus */
+    *:focus {
+        outline: none !important;
     }
 
     @media (max-width: 768px) {
         .auth-card {
-            padding: 30px 20px;
+            padding: 35px 25px;
         }
 
         .auth-title {
-            font-size: 1.5rem;
+            font-size: 2.5rem;
         }
 
         .account-type-selector .btn-outline-primary {
-            padding: 15px;
+            padding: 20px;
         }
 
         .account-type-selector .btn-outline-primary i {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
     }
 </style>
