@@ -11,4 +11,9 @@
         <livewire:cart-page />
     </div>
 </section>
+
+{{-- Dynamic Toast Container --}}
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050" id="dynamicToasts">
+    <!-- Dynamic toasts will be inserted here -->
+</div>
 @endsection

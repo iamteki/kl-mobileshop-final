@@ -15,7 +15,7 @@
                     
                     {{-- Display ALL cart items --}}
                     @foreach($cart['items'] as $itemId => $item)
-                        <div class="cart-item-card position-relative" wire:key="item-{{ $loop->index }}">
+                        <div class="cart-item-card position-relative" wire:key="cart-item-{{ $itemId }}-{{ $item['quantity'] }}">
                             <div class="row g-4">
                                 <div class="col-md-2">
                                     <div class="cart-item-image">
@@ -63,9 +63,11 @@
                                 <div class="col-md-2">
                                     @if($item['type'] === 'product')
                                         <div class="quantity-controls">
-                                            <button wire:click="updateQuantity('{{ $itemId }}', {{ max(0, $item['quantity'] - 1) }})" 
+                                            <button wire:click="decreaseQuantity('{{ $itemId }}')" 
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="decreaseQuantity('{{ $itemId }}')"
                                                     class="qty-btn-small"
-                                                    {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
+                                                    @if($item['quantity'] <= 1) disabled @endif>
                                                 <i class="fas fa-minus"></i>
                                             </button>
                                             <input type="number" 
@@ -73,7 +75,9 @@
                                                    class="qty-input-small"
                                                    min="1"
                                                    readonly>
-                                            <button wire:click="updateQuantity('{{ $itemId }}', {{ $item['quantity'] + 1 }})" 
+                                            <button wire:click="increaseQuantity('{{ $itemId }}')" 
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="increaseQuantity('{{ $itemId }}')"
                                                     class="qty-btn-small">
                                                 <i class="fas fa-plus"></i>
                                             </button>
@@ -110,16 +114,16 @@
                                 </div>
                             </div>
                             
-                            {{-- Loading overlay for specific item --}}
-                            <div wire:loading.delay wire:target="updateQuantity('{{ $itemId }}', {{ $item['quantity'] ?? 1 }})" 
-                                 class="item-loading-overlay">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                            {{-- Loading overlay for specific item - Only show when this specific item is being updated --}}
+                            @if($updatingItemId === $itemId)
+                                <div wire:loading class="item-loading-overlay">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             
-                            <div wire:loading.delay wire:target="removeItem('{{ $itemId }}')" 
-                                 class="item-loading-overlay">
+                            <div wire:loading wire:target="removeItem('{{ $itemId }}')" class="item-loading-overlay">
                                 <div class="spinner-border text-danger" role="status">
                                     <span class="visually-hidden">Removing...</span>
                                 </div>
@@ -140,7 +144,7 @@
                                 <div class="input-group">
                                     <input type="text" 
                                            wire:model="couponCode" 
-                                           class="form-control" 
+                                           class="form-control coupon-input" 
                                            placeholder="Enter coupon code">
                                     <button wire:click="applyCoupon" 
                                             class="btn btn-outline-primary"
@@ -232,24 +236,17 @@
             </a>
         </div>
     @endif
-    
-    {{-- Success Messages --}}
-    <div wire:ignore>
-        @if (session()->has('success'))
-            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050">
-                <div class="toast show" role="alert">
-                    <div class="toast-header bg-success text-white">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <strong class="me-auto">Success</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
-                    </div>
-                    <div class="toast-body">
-                        {{ session('success') }}
-                    </div>
-                </div>
-            </div>
-        @endif
-    </div>
+</div>
+
+{{-- Toast Notifications Outside Livewire Component --}}
+@once
+    @push('modals')
+        {{-- Dynamic Toast Container --}}
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050" id="dynamicToasts">
+            <!-- Dynamic toasts will be inserted here -->
+        </div>
+    @endpush
+@endonce
 
     @push('styles')
     <style>
@@ -317,20 +314,29 @@
     .qty-btn-small {
         width: 30px;
         height: 30px;
-        border: 1px solid var(--border-dark);
+        border: 1px solid var(--border-dark, rgba(255, 255, 255, 0.2));
         background: transparent;
-        color: var(--text-light);
+        color: var(--text-light, #fff);
         border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 
     .qty-btn-small:hover:not(:disabled) {
-        background: var(--primary-purple);
-        border-color: var(--primary-purple);
+        background: var(--primary-purple, #9333EA);
+        border-color: var(--primary-purple, #9333EA);
+        color: #fff;
+    }
+
+    .qty-btn-small:active:not(:disabled) {
+        transform: scale(0.95);
     }
 
     .qty-btn-small:disabled {
@@ -343,9 +349,26 @@
         height: 30px;
         text-align: center;
         background: transparent;
-        border: 1px solid var(--border-dark);
-        color: var(--text-light);
+        border: 1px solid var(--border-dark, rgba(255, 255, 255, 0.2));
+        color: var(--text-light, #fff);
         border-radius: 5px;
+        -moz-appearance: textfield;
+        cursor: default;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+    
+    .qty-input-small:focus {
+        outline: none;
+        border-color: var(--border-dark, rgba(255, 255, 255, 0.2));
+    }
+    
+    .qty-input-small::-webkit-outer-spin-button,
+    .qty-input-small::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     /* Price Display */
@@ -361,12 +384,12 @@
         top: 20px;
         max-height: calc(100vh - 40px);
         overflow-y: auto;
-        z-index: 10; /* Lower than navbar */
+        z-index: 10;
     }
 
     .cart-summary {
-        background: var(--bg-card);
-        border: 1px solid var(--border-dark);
+        background: var(--bg-card, #141414);
+        border: 1px solid var(--border-dark, rgba(255, 255, 255, 0.1));
         border-radius: 15px;
         padding: 30px;
     }
@@ -374,7 +397,7 @@
     .summary-title {
         font-size: 24px;
         font-weight: 600;
-        color: var(--text-light);
+        color: var(--text-light, #fff);
         margin-bottom: 20px;
     }
 
@@ -383,26 +406,33 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
-        color: var(--text-gray);
+        color: var(--text-gray, #9CA3AF);
     }
 
     .summary-row.total {
         font-size: 20px;
         font-weight: 600;
-        color: var(--text-light);
+        color: var(--text-light, #fff);
     }
 
-    /* Coupon Section */
-    .coupon-section .form-control {
+    /* Coupon Section - Fixed */
+    .coupon-section .coupon-input {
         background: rgba(255, 255, 255, 0.05);
-        border-color: var(--border-dark);
-        color: var(--text-light);
+        border-color: var(--border-dark, rgba(255, 255, 255, 0.2));
+        color: var(--text-light, #fff);
     }
 
-    .coupon-section .form-control:focus {
+    /* Make placeholder text visible */
+    .coupon-section .coupon-input::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+        opacity: 1 !important;
+    }
+
+    .coupon-section .coupon-input:focus {
         background: rgba(255, 255, 255, 0.08);
-        border-color: var(--primary-purple);
+        border-color: var(--primary-purple, #9333EA);
         box-shadow: 0 0 0 0.2rem rgba(147, 51, 234, 0.25);
+        color: #fff;
     }
 
     .applied-coupon {
@@ -428,16 +458,88 @@
         border-radius: 15px;
     }
 
-    /* Loading States */
+    /* Button states */
     .btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
 
+    /* Custom Toast Notifications */
+    .custom-toast {
+        background: var(--bg-card, #141414);
+        border: 1px solid rgba(147, 51, 234, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(147, 51, 234, 0.2);
+        min-width: 350px;
+        animation: slideInRight 0.3s ease-out;
+    }
+    
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .custom-toast .toast-header {
+        background: transparent;
+        border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+        color: var(--text-light, #fff);
+        padding: 12px 16px;
+    }
+    
+    .custom-toast .toast-body {
+        color: var(--text-gray, #9CA3AF);
+        padding: 16px;
+    }
+    
+    .toast-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+    }
+    
+    .toast-icon.success {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22C55E;
+    }
+    
+    .toast-icon.error {
+        background: rgba(239, 68, 68, 0.2);
+        color: #EF4444;
+    }
+    
+    .toast-icon.warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #F59E0B;
+    }
+    
+    .toast-icon.info {
+        background: rgba(59, 130, 246, 0.2);
+        color: #3B82F6;
+    }
+    
+    .custom-toast .btn-close {
+        filter: invert(1);
+        opacity: 0.8;
+    }
+    
+    .custom-toast .btn-close:hover {
+        opacity: 1;
+    }
+
     /* Fix for navbar overlap */
     @media (min-width: 992px) {
         .cart-summary-wrapper {
-            top: 80px; /* Adjust based on your navbar height */
+            top: 80px;
         }
     }
 
@@ -463,4 +565,93 @@
     }
     </style>
     @endpush
-</div> {{-- End of single root element wrapper --}}
+    
+    @push('scripts')
+    <script>
+        // Function to show toast
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('dynamicToasts');
+            const toastId = 'toast-' + Date.now();
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            const toastHtml = `
+                <div class="toast custom-toast show" role="alert" id="${toastId}" data-bs-autohide="true" data-bs-delay="5000">
+                    <div class="toast-header">
+                        <div class="toast-icon ${type}">
+                            <i class="fas ${icons[type]}"></i>
+                        </div>
+                        <strong class="me-auto">${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            
+            // Remove toast from DOM after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
+        
+        // Initialize Bootstrap toasts
+        document.addEventListener('DOMContentLoaded', function() {
+            const toastElList = document.querySelectorAll('.toast');
+            const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl));
+            
+            // Prevent manual input in quantity fields
+            document.querySelectorAll('.qty-input-small').forEach(input => {
+                input.addEventListener('keydown', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+                input.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        });
+        
+        // Listen for Livewire events to show toasts
+        window.addEventListener('showToast', event => {
+            showToast(event.detail.message, event.detail.type);
+        });
+        
+        document.addEventListener('livewire:init', () => {
+            // Re-apply input restrictions after Livewire updates
+            Livewire.hook('message.processed', (message, component) => {
+                // Re-enable buttons after Livewire updates
+                document.querySelectorAll('.qty-btn-small').forEach(btn => {
+                    if (!btn.closest('.cart-item-card').querySelector('.item-loading-overlay')) {
+                        btn.disabled = false;
+                    }
+                });
+                
+                // Re-apply input restrictions
+                document.querySelectorAll('.qty-input-small').forEach(input => {
+                    input.addEventListener('keydown', (e) => {
+                        e.preventDefault();
+                        return false;
+                    });
+                });
+            });
+        });
+    </script>
+    @endpush
+</div>

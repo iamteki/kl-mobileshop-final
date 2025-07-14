@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Session;
 use App\Models\Coupon;
+use App\Models\Inventory;
 
 class CartService
 {
@@ -52,13 +53,49 @@ class CartService
     public function addItem(array $itemData): string
     {
         $cart = $this->getItems();
+        
+        // Check available quantity before adding
+        if ($itemData['type'] === 'product') {
+            $availableQty = $this->checkAvailableQuantity(
+                $itemData['product_id'], 
+                $itemData['variation_id'] ?? null
+            );
+            
+            // Find existing items of same product/variation
+            $existingQty = 0;
+            foreach ($cart as $cartItem) {
+                if ($cartItem['type'] === 'product' && 
+                    $cartItem['product_id'] == $itemData['product_id'] &&
+                    ($cartItem['variation_id'] ?? null) == ($itemData['variation_id'] ?? null)) {
+                    $existingQty += $cartItem['quantity'];
+                }
+            }
+            
+            if ($existingQty + $itemData['quantity'] > $availableQty) {
+                throw new \Exception('Not enough stock available. Only ' . ($availableQty - $existingQty) . ' items left.');
+            }
+        }
+        
         $cartItemId = $this->generateCartItemId($itemData);
         
         // For products, check if same item exists and merge quantities
-        if ($itemData['type'] === 'product' && isset($cart[$cartItemId])) {
-            $cart[$cartItemId]['quantity'] += $itemData['quantity'];
-            $cart[$cartItemId]['updated_at'] = now();
-        } else {
+        $merged = false;
+        if ($itemData['type'] === 'product') {
+            foreach ($cart as $existingId => $existingItem) {
+                if ($existingItem['type'] === 'product' && 
+                    $existingItem['product_id'] == $itemData['product_id'] &&
+                    ($existingItem['variation_id'] ?? null) == ($itemData['variation_id'] ?? null)) {
+                    // Merge with existing item
+                    $cart[$existingId]['quantity'] += $itemData['quantity'];
+                    $cart[$existingId]['updated_at'] = now();
+                    $merged = true;
+                    $cartItemId = $existingId;
+                    break;
+                }
+            }
+        }
+        
+        if (!$merged) {
             $itemData['id'] = $cartItemId;
             $itemData['added_at'] = now();
             $cart[$cartItemId] = $itemData;
@@ -71,13 +108,32 @@ class CartService
     }
     
     /**
+     * Check available quantity in inventory
+     */
+    protected function checkAvailableQuantity($productId, $variationId = null): int
+    {
+        $inventory = Inventory::where('product_id', $productId);
+        
+        if ($variationId) {
+            $inventory->where('product_variation_id', $variationId);
+        } else {
+            $inventory->whereNull('product_variation_id');
+        }
+        
+        $inventoryRecord = $inventory->first();
+        
+        return $inventoryRecord ? $inventoryRecord->available_quantity : 0;
+    }
+    
+    /**
      * Generate unique cart item ID
      */
     protected function generateCartItemId(array $itemData): string
     {
         switch ($itemData['type']) {
             case 'product':
-                return 'product_' . $itemData['product_id'] . '_' . ($itemData['variation_id'] ?? 0) . '_' . uniqid();
+                // Don't use uniqid for products to allow merging
+                return 'product_' . $itemData['product_id'] . '_' . ($itemData['variation_id'] ?? 0);
                 
             case 'service_provider':
                 return 'service_' . $itemData['provider_id'] . '_' . ($itemData['pricing_tier_id'] ?? 0) . '_' . uniqid();
@@ -100,6 +156,29 @@ class CartService
         if (isset($cart[$itemId])) {
             if ($quantity <= 0) {
                 return $this->removeItem($itemId);
+            }
+            
+            // Check available quantity for products
+            if ($cart[$itemId]['type'] === 'product') {
+                $availableQty = $this->checkAvailableQuantity(
+                    $cart[$itemId]['product_id'], 
+                    $cart[$itemId]['variation_id'] ?? null
+                );
+                
+                // Check other cart items with same product
+                $existingQty = 0;
+                foreach ($cart as $id => $item) {
+                    if ($id !== $itemId && 
+                        $item['type'] === 'product' && 
+                        $item['product_id'] == $cart[$itemId]['product_id'] &&
+                        ($item['variation_id'] ?? null) == ($cart[$itemId]['variation_id'] ?? null)) {
+                        $existingQty += $item['quantity'];
+                    }
+                }
+                
+                if ($quantity + $existingQty > $availableQty) {
+                    throw new \Exception('Not enough stock available');
+                }
             }
             
             $cart[$itemId]['quantity'] = $quantity;
@@ -208,9 +287,12 @@ class CartService
      */
     public function getTax(float $amount = null): float
     {
-        // Implement your tax calculation logic
-        // For now, return 0 (no tax)
-        return 0;
+        if ($amount === null) {
+            $amount = $this->getSubtotal() - Session::get('cart_discount', 0);
+        }
+        
+        // 15% VAT as shown in the blade template
+        return $amount * 0.15;
     }
     
     /**
