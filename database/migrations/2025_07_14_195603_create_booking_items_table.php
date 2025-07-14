@@ -6,51 +6,42 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('booking_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained()->onDelete('cascade');
-            
-            // Item Type (product, service, or package)
-            $table->enum('item_type', ['product', 'service', 'package']);
-            
-            // Polymorphic relation
+            $table->enum('item_type', ['product', 'service', 'service_provider', 'package'])->default('product');
             $table->unsignedBigInteger('item_id');
-            $table->string('item_name'); // Denormalized for historical record
+            $table->unsignedBigInteger('service_provider_id')->nullable();
+            $table->unsignedBigInteger('service_provider_pricing_id')->nullable();
+            $table->string('item_name');
             $table->string('item_sku')->nullable();
-            
-            // If product with variation
-            $table->foreignId('product_variation_id')->nullable()->constrained('product_variations');
+            $table->foreignId('product_variation_id')->nullable()->constrained();
             $table->string('variation_name')->nullable();
-            
-            // Quantity and Pricing
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->decimal('total_price', 10, 2);
             $table->integer('rental_days');
-            
-            // Additional Options
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->json('selected_addons')->nullable();
-            $table->decimal('addons_price', 10, 2)->default(0);
-            
-            // Status
+            $table->decimal('addons_price', 10, 2)->default(0.00);
             $table->enum('status', ['pending', 'confirmed', 'delivered', 'returned', 'damaged', 'lost'])->default('pending');
             $table->timestamp('delivered_at')->nullable();
             $table->timestamp('returned_at')->nullable();
-            
-            // Notes
             $table->text('notes')->nullable();
-            
             $table->timestamps();
-            
+
             $table->index('booking_id');
             $table->index(['item_type', 'item_id']);
             $table->index('status');
+            $table->index('service_provider_id');
+            $table->index('service_provider_pricing_id');
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('booking_items');
     }

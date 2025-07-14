@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('product_variations', function (Blueprint $table) {
             $table->id();
@@ -15,18 +15,18 @@ return new class extends Migration
             $table->string('sku')->unique();
             $table->decimal('price', 10, 2);
             $table->integer('available_quantity')->default(0);
-            $table->json('attributes')->nullable(); // Store variation-specific attributes
+            $table->json('attributes')->nullable();
             $table->integer('sort_order')->default(0);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-            
+
             $table->index('product_id');
             $table->index('sku');
             $table->index('status');
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('product_variations');
     }

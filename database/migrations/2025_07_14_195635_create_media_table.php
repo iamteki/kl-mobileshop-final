@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->morphs('model');
+            $table->string('model_type');
+            $table->unsignedBigInteger('model_id');
             $table->string('uuid')->nullable()->unique();
             $table->string('collection_name');
             $table->string('name');
@@ -23,12 +24,15 @@ return new class extends Migration
             $table->json('custom_properties');
             $table->json('generated_conversions');
             $table->json('responsive_images');
-            $table->unsignedInteger('order_column')->nullable()->index();
+            $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();
+
+            $table->index(['model_type', 'model_id']);
+            $table->index('order_column');
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('media');
     }

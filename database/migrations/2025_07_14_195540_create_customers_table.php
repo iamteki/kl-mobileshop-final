@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
@@ -18,20 +18,20 @@ return new class extends Migration
             $table->string('tax_id')->nullable();
             $table->enum('customer_type', ['individual', 'corporate'])->default('individual');
             $table->integer('total_bookings')->default(0);
-            $table->decimal('total_spent', 12, 2)->default(0);
+            $table->decimal('total_spent', 12, 2)->default(0.00);
             $table->date('last_booking_date')->nullable();
-            $table->json('preferences')->nullable(); // Store customer preferences
+            $table->json('preferences')->nullable();
             $table->boolean('newsletter_subscribed')->default(false);
             $table->boolean('sms_notifications')->default(false);
             $table->timestamps();
-            
+
             $table->index('user_id');
             $table->index('customer_type');
             $table->index('company');
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('customers');
     }

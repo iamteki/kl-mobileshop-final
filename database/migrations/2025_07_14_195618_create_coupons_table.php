@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
@@ -24,14 +24,14 @@ return new class extends Migration
             $table->date('valid_until');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index('code');
             $table->index('is_active');
             $table->index(['valid_from', 'valid_until']);
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('coupons');
     }
