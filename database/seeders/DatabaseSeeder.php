@@ -3,523 +3,320 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\ProductVariation;
-use App\Models\Service;
-use App\Models\Package;
-use App\Models\Customer;
-use App\Models\Inventory;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
     {
-        // Create admin user
-        $adminUser = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@klmobile.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
+        // Disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Truncate all tables
+        DB::table('inventory_transactions')->truncate();
+        DB::table('inventory')->truncate();
+        DB::table('coupons')->truncate();
+        DB::table('service_provider_reviews')->truncate();
+        DB::table('booking_items')->truncate();
+        DB::table('bookings')->truncate();
+        DB::table('customers')->truncate();
+        DB::table('packages')->truncate();
+        DB::table('service_provider_pricing')->truncate();
+        DB::table('service_provider_media')->truncate();
+        DB::table('service_providers')->truncate();
+        DB::table('service_categories')->truncate();
+        DB::table('product_attributes')->truncate();
+        DB::table('product_variations')->truncate();
+        DB::table('products')->truncate();
+        DB::table('categories')->truncate();
+        DB::table('users')->truncate();
+        DB::table('media')->truncate();
+        DB::table('failed_jobs')->truncate();
+        DB::table('job_batches')->truncate();
+        DB::table('jobs')->truncate();
+        DB::table('cache_locks')->truncate();
+        DB::table('cache')->truncate();
+        DB::table('sessions')->truncate();
+        DB::table('password_reset_tokens')->truncate();
+
+        // Seed Users
+        DB::table('users')->insert([
+            [
+                'id' => 8,
+                'name' => 'John Doe',
+                'email' => 'customer@test.com',
+                'is_admin' => 0,
+                'email_verified_at' => '2025-07-01 07:37:06',
+                'password' => '$2y$12$Pfflzjmbu3vDR1jyUFcC6OTJSqEx1qFX6w0S4QT8BfRDO7ERykKdW',
+                'remember_token' => null,
+                'last_login_at' => null,
+                'created_at' => '2025-07-01 07:37:06',
+                'updated_at' => '2025-07-01 07:37:06',
+            ],
+            [
+                'id' => 9,
+                'name' => 'A.G.T. Kaushalya Wickramasinghe',
+                'email' => 'tekiyagaming@gmail.com',
+                'is_admin' => 0,
+                'email_verified_at' => null,
+                'password' => '$2y$12$pRw4xMOTdgG1N2dsSZ4MJ.3iMdX8r9CCZXKJyLuzuLAH79mShpUQm',
+                'remember_token' => null,
+                'last_login_at' => '2025-07-04 17:23:40',
+                'created_at' => '2025-07-03 18:23:30',
+                'updated_at' => '2025-07-04 17:23:40',
+            ],
+            [
+                'id' => 11,
+                'name' => 'admin',
+                'email' => 'admin@gmail.com',
+                'is_admin' => 1,
+                'email_verified_at' => null,
+                'password' => '$2y$12$JP5KZitiE5ECFAGbITm6FOzANtIasp7dWVJBdXqv4d4CWfIWLH9om',
+                'remember_token' => 'Z0fdHHRFZXf2ruX4PurW6Vp6usiQEXWCh37YpENOlGSeaUBrhPlhH1gzfCmd',
+                'last_login_at' => null,
+                'created_at' => '2025-07-04 17:37:12',
+                'updated_at' => '2025-07-04 17:37:12',
+            ],
         ]);
 
-        // Create test customer user
-        $customerUser = User::create([
-            'name' => 'John Doe',
-            'email' => 'customer@test.com',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
+        // Seed Categories
+        DB::table('categories')->insert([
+            ['id' => 3, 'name' => 'Sound Equipment', 'slug' => 'sound-equipment', 'description' => 'Professional PA systems, speakers, mixers, and audio equipment for events of all sizes', 'icon' => 'fas fa-volume-up', 'image' => null, 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 4, 'name' => 'Lighting Equipment', 'slug' => 'lighting', 'description' => 'LED lights, spotlights, moving heads, and stage lighting solutions', 'icon' => 'fas fa-lightbulb', 'image' => null, 'sort_order' => 1, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-04 18:09:23'],
+            ['id' => 5, 'name' => 'LED Screens', 'slug' => 'led-screens', 'description' => 'Indoor and outdoor LED display screens for presentations and visuals', 'icon' => 'fas fa-tv', 'image' => null, 'sort_order' => 2, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 6, 'name' => 'DJ Equipment', 'slug' => 'dj-equipment', 'description' => 'Professional DJ controllers, turntables, and mixing equipment', 'icon' => 'fas fa-headphones', 'image' => null, 'sort_order' => 3, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 7, 'name' => 'Backdrops', 'slug' => 'backdrops', 'description' => 'Event backdrops, pipe and drape systems for all occasions', 'icon' => 'fas fa-image', 'image' => null, 'sort_order' => 4, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 8, 'name' => 'Tables & Chairs', 'slug' => 'tables-chairs', 'description' => 'Event furniture including banquet tables, chairs, and cocktail tables', 'icon' => 'fas fa-chair', 'image' => null, 'sort_order' => 5, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 9, 'name' => 'Tents & Canopy', 'slug' => 'tents-canopy', 'description' => 'Outdoor event tents, marquees, and weather protection', 'icon' => 'fas fa-campground', 'image' => null, 'sort_order' => 6, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 10, 'name' => 'Photo Boothsss', 'slug' => 'photo-booths', 'description' => 'Interactive photo booths with instant printing and digital sharing', 'icon' => 'fas fa-camera', 'image' => null, 'sort_order' => 7, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
         ]);
 
-        // Create customer profile
-        Customer::create([
-            'user_id' => $customerUser->id,
-            'phone' => '+60123456789',
-            'address' => '123 Main Street, Kuala Lumpur',
-            'company' => 'Test Company Sdn Bhd',
-            'customer_type' => 'corporate',
+        // Seed Products
+        DB::table('products')->insert([
+            ['id' => 1, 'category_id' => 3, 'name' => 'JBL Professional PA System', 'slug' => 'jbl-professional-pa-system', 'sku' => 'SOU-001', 'brand' => 'JBL', 'subcategory' => 'PA Systems', 'short_description' => 'Professional-grade PA system perfect for corporate events, weddings, and conferences. Features crystal-clear audio output with 1000W RMS power.', 'detailed_description' => null, 'base_price' => 15000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 19, 'sort_order' => 0, 'featured' => 1, 'included_items' => '["2x Professional Speakers", "2x Speaker Stands", "Mixing Console", "All Necessary Cables", "Power Distribution", "Setup & Testing"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 2, 'category_id' => 3, 'name' => 'Yamaha MG16XU 16-Channel Mixer', 'slug' => 'yamaha-mg16xu-16-channel-mixer', 'sku' => 'SOU-002', 'brand' => 'Yamaha', 'subcategory' => 'Mixers', 'short_description' => '16-channel mixing console with built-in effects and USB audio interface.', 'detailed_description' => null, 'base_price' => 8000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 17, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["2x Professional Speakers", "2x Speaker Stands", "Mixing Console", "All Necessary Cables", "Power Distribution", "Setup & Testing"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 3, 'category_id' => 3, 'name' => 'Shure BLX Wireless Microphone Set', 'slug' => 'shure-blx-wireless-microphone-set', 'sku' => 'SOU-003', 'brand' => 'Shure', 'subcategory' => 'Microphones', 'short_description' => 'Professional wireless microphone system with reliable UHF performance.', 'detailed_description' => null, 'base_price' => 5000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 16, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["2x Professional Speakers", "2x Speaker Stands", "Mixing Console", "All Necessary Cables", "Power Distribution", "Setup & Testing"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 4, 'category_id' => 4, 'name' => 'LED Par Light Set (12 Units)', 'slug' => 'led-par-light-set-12-units', 'sku' => 'LIG-001', 'brand' => 'Chauvet', 'subcategory' => 'LED Lights', 'short_description' => 'RGB LED par lights with DMX control for vibrant stage lighting.', 'detailed_description' => null, 'base_price' => 8000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 9, 'sort_order' => 0, 'featured' => 1, 'included_items' => '["Complete Light Set", "DMX Controller", "Lighting Stands/Trusses", "Power & DMX Cables", "Safety Equipment", "Programming Service"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 5, 'category_id' => 4, 'name' => 'Moving Head Spot Light', 'slug' => 'moving-head-spot-light', 'sku' => 'LIG-002', 'brand' => 'Martin', 'subcategory' => 'Moving Heads', 'short_description' => 'Professional moving head with gobo patterns and color wheels.', 'detailed_description' => null, 'base_price' => 12000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 13, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["Complete Light Set", "DMX Controller", "Lighting Stands/Trusses", "Power & DMX Cables", "Safety Equipment", "Programming Service"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 6, 'category_id' => 4, 'name' => 'LED Uplighting Package', 'slug' => 'led-uplighting-package', 'sku' => 'LIG-003', 'brand' => 'ADJ', 'subcategory' => 'Uplighting', 'short_description' => 'Wireless LED uplights for ambient venue lighting.', 'detailed_description' => null, 'base_price' => 6000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 12, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["Complete Light Set", "DMX Controller", "Lighting Stands/Trusses", "Power & DMX Cables", "Safety Equipment", "Programming Service"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 7, 'category_id' => 5, 'name' => 'P3.91 Indoor LED Wall (3x2m)', 'slug' => 'p391-indoor-led-wall-3x2m', 'sku' => 'LED-001', 'brand' => 'Absen', 'subcategory' => null, 'short_description' => 'High-resolution indoor LED video wall perfect for presentations.', 'detailed_description' => null, 'base_price' => 25000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 13, 'sort_order' => 0, 'featured' => 1, 'included_items' => '["LED Panel Modules", "Processing Unit", "Mounting Structure", "Power Distribution", "Content Management", "Technical Support"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 8, 'category_id' => 5, 'name' => 'P4.81 Outdoor LED Screen', 'slug' => 'p481-outdoor-led-screen', 'sku' => 'LED-002', 'brand' => 'Novastar', 'subcategory' => null, 'short_description' => 'Weather-resistant outdoor LED display for large events.', 'detailed_description' => null, 'base_price' => 30000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 14, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["LED Panel Modules", "Processing Unit", "Mounting Structure", "Power Distribution", "Content Management", "Technical Support"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 9, 'category_id' => 6, 'name' => 'Pioneer DDJ-FLX6 Controller', 'slug' => 'pioneer-ddj-flx6-controller', 'sku' => 'DJ--001', 'brand' => 'Pioneer', 'subcategory' => null, 'short_description' => '4-channel DJ controller with Serato DJ Pro compatibility.', 'detailed_description' => null, 'base_price' => 12000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 6, 'sort_order' => 0, 'featured' => 1, 'included_items' => '["DJ Controller/Turntables", "DJ Mixer", "Headphones", "All Cables", "Laptop Stand", "Basic Lighting"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 10, 'category_id' => 6, 'name' => 'Technics SL-1200 Turntables (Pair)', 'slug' => 'technics-sl-1200-turntables-pair', 'sku' => 'DJ--002', 'brand' => 'Technics', 'subcategory' => null, 'short_description' => 'Industry-standard direct drive turntables for professional DJs.', 'detailed_description' => null, 'base_price' => 18000.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 7, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["DJ Controller/Turntables", "DJ Mixer", "Headphones", "All Cables", "Laptop Stand", "Basic Lighting"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 11, 'category_id' => 8, 'name' => 'Round Banquet Table (10 pax)', 'slug' => 'round-banquet-table-10-pax', 'sku' => 'TAB-001', 'brand' => 'Generic', 'subcategory' => null, 'short_description' => 'Standard round banquet table with white tablecloth.', 'detailed_description' => null, 'base_price' => 500.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 13, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["Equipment as described", "Basic accessories", "Setup guide"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 12, 'category_id' => 8, 'name' => 'Chiavari Chairs', 'slug' => 'chiavari-chairs', 'sku' => 'TAB-002', 'brand' => 'Generic', 'subcategory' => null, 'short_description' => 'Elegant Chiavari chairs available in gold, silver, or white.', 'detailed_description' => null, 'base_price' => 150.00, 'price_unit' => 'day', 'min_quantity' => 1, 'max_quantity' => 10, 'available_quantity' => 17, 'sort_order' => 0, 'featured' => 0, 'included_items' => '["Equipment as described", "Basic accessories", "Setup guide"]', 'addons' => null, 'meta_title' => null, 'meta_description' => null, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
         ]);
 
-        // Create categories
-        $categories = [
-            [
-                'name' => 'Sound Equipment',
-                'slug' => 'sound-equipment',
-                'icon' => 'fas fa-volume-up',
-                'description' => 'Professional PA systems, speakers, mixers, and audio equipment for events of all sizes'
-            ],
-            [
-                'name' => 'Lighting Equipment',
-                'slug' => 'lighting',
-                'icon' => 'fas fa-lightbulb',
-                'description' => 'LED lights, spotlights, moving heads, and stage lighting solutions'
-            ],
-            [
-                'name' => 'LED Screens',
-                'slug' => 'led-screens',
-                'icon' => 'fas fa-tv',
-                'description' => 'Indoor and outdoor LED display screens for presentations and visuals'
-            ],
-            [
-                'name' => 'DJ Equipment',
-                'slug' => 'dj-equipment',
-                'icon' => 'fas fa-headphones',
-                'description' => 'Professional DJ controllers, turntables, and mixing equipment'
-            ],
-            [
-                'name' => 'Backdrops',
-                'slug' => 'backdrops',
-                'icon' => 'fas fa-image',
-                'description' => 'Event backdrops, pipe and drape systems for all occasions'
-            ],
-            [
-                'name' => 'Tables & Chairs',
-                'slug' => 'tables-chairs',
-                'icon' => 'fas fa-chair',
-                'description' => 'Event furniture including banquet tables, chairs, and cocktail tables'
-            ],
-            [
-                'name' => 'Tents & Canopy',
-                'slug' => 'tents-canopy',
-                'icon' => 'fas fa-campground',
-                'description' => 'Outdoor event tents, marquees, and weather protection'
-            ],
-            [
-                'name' => 'Photo Booths',
-                'slug' => 'photo-booths',
-                'icon' => 'fas fa-camera',
-                'description' => 'Interactive photo booths with instant printing and digital sharing'
-            ],
+        // Seed Product Variations
+        DB::table('product_variations')->insert([
+            ['id' => 1, 'product_id' => 1, 'name' => '500W System', 'sku' => 'SOU-001-V1', 'price' => 10000.00, 'available_quantity' => 6, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 2, 'product_id' => 1, 'name' => '1000W System', 'sku' => 'SOU-001-V2', 'price' => 15000.00, 'available_quantity' => 9, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 3, 'product_id' => 1, 'name' => '1500W System', 'sku' => 'SOU-001-V3', 'price' => 20000.00, 'available_quantity' => 7, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 4, 'product_id' => 11, 'name' => '6 pax table', 'sku' => 'TAB-001-V1', 'price' => 400.00, 'available_quantity' => 7, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 5, 'product_id' => 11, 'name' => '8 pax table', 'sku' => 'TAB-001-V2', 'price' => 450.00, 'available_quantity' => 6, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 6, 'product_id' => 11, 'name' => '10 pax table', 'sku' => 'TAB-001-V3', 'price' => 500.00, 'available_quantity' => 4, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 7, 'product_id' => 12, 'name' => 'Gold', 'sku' => 'TAB-002-V1', 'price' => 150.00, 'available_quantity' => 8, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 8, 'product_id' => 12, 'name' => 'Silver', 'sku' => 'TAB-002-V2', 'price' => 150.00, 'available_quantity' => 10, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 9, 'product_id' => 12, 'name' => 'White', 'sku' => 'TAB-002-V3', 'price' => 150.00, 'available_quantity' => 8, 'attributes' => null, 'sort_order' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+        ]);
+
+        // Seed Service Categories
+        DB::table('service_categories')->insert([
+            ['id' => 3, 'name' => 'Professional DJs', 'slug' => 'professional-djs', 'description' => 'Experienced DJs for all types of events', 'icon' => 'fas fa-headphones', 'image' => null, 'parent_category' => 'entertainment', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 4, 'name' => 'Event Emcees', 'slug' => 'event-emcees', 'description' => 'Professional MCs for all occasions', 'icon' => 'fas fa-microphone', 'image' => null, 'parent_category' => 'entertainment', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 5, 'name' => 'Live Bands', 'slug' => 'live-bands', 'description' => 'Professional bands for live performances', 'icon' => 'fas fa-guitar', 'image' => null, 'parent_category' => 'entertainment', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 6, 'name' => 'Sound Engineers', 'slug' => 'sound-engineers', 'description' => 'Professional audio engineers for events', 'icon' => 'fas fa-sliders-h', 'image' => null, 'parent_category' => 'technical-crew', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 7, 'name' => 'Lighting Technicians', 'slug' => 'lighting-technicians', 'description' => 'Expert lighting designers and operators', 'icon' => 'fas fa-lightbulb', 'image' => null, 'parent_category' => 'technical-crew', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 8, 'name' => 'Photographers', 'slug' => 'photographers', 'description' => 'Professional event photographers', 'icon' => 'fas fa-camera', 'image' => null, 'parent_category' => 'media-production', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 9, 'name' => 'Videographers', 'slug' => 'videographers', 'description' => 'Professional video coverage for events', 'icon' => 'fas fa-video', 'image' => null, 'parent_category' => 'media-production', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 10, 'name' => 'Event Coordinators', 'slug' => 'event-coordinators', 'description' => 'Professional event planning and coordination', 'icon' => 'fas fa-clipboard-list', 'image' => null, 'parent_category' => 'event-staff', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 11, 'name' => 'Event Ushers', 'slug' => 'event-ushers', 'description' => 'Professional ushers for guest management', 'icon' => 'fas fa-user-tie', 'image' => null, 'parent_category' => 'event-staff', 'sort_order' => 0, 'show_on_homepage' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+        ]);
+
+        // Seed Service Providers
+        DB::table('service_providers')->insert([
+            ['id' => 2, 'service_category_id' => 3, 'name' => 'Mike Johnson', 'slug' => 'dj-mike', 'stage_name' => 'DJ Mike', 'bio' => 'Professional DJ with 10+ years experience in clubs and events', 'short_description' => 'Professional DJ with 10+ years experience in clubs and events', 'base_price' => 25000.00, 'price_unit' => 'event', 'features' => '["Professional DJ equipment", "Music library with latest hits", "Light coordination", "MC services", "Setup and breakdown"]', 'experience_level' => 'Professional', 'years_experience' => 10, 'languages' => '["English", "Sinhala"]', 'specialties' => '["House", "Hip Hop", "Commercial", "Retro"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.80, 'total_reviews' => 45, 'total_bookings' => 150, 'badge' => 'Top Rated', 'badge_class' => null, 'sort_order' => 0, 'featured' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 3, 'service_category_id' => 3, 'name' => 'Sarah Williams', 'slug' => 'dj-sara', 'stage_name' => 'DJ Sara', 'bio' => 'Specializing in weddings and corporate events', 'short_description' => 'Specializing in weddings and corporate events', 'base_price' => 30000.00, 'price_unit' => 'event', 'features' => '["Professional DJ equipment", "Music library with latest hits", "Light coordination", "MC services", "Setup and breakdown"]', 'experience_level' => 'Premium', 'years_experience' => 8, 'languages' => '["English", "Tamil"]', 'specialties' => '["Wedding", "Corporate", "Lounge", "Bollywood"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.90, 'total_reviews' => 14, 'total_bookings' => 120, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 4, 'service_category_id' => 3, 'name' => 'Alex Chen', 'slug' => 'dj-fusion', 'stage_name' => 'DJ Fusion', 'bio' => 'Electronic music specialist', 'short_description' => 'Electronic music specialist', 'base_price' => 20000.00, 'price_unit' => 'event', 'features' => '["Professional DJ equipment", "Music library with latest hits", "Light coordination", "MC services", "Setup and breakdown"]', 'experience_level' => 'Professional', 'years_experience' => 5, 'languages' => '["English"]', 'specialties' => '["EDM", "Techno", "Progressive", "Trance"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.50, 'total_reviews' => 28, 'total_bookings' => 80, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 5, 'service_category_id' => 4, 'name' => 'David Fernando', 'slug' => 'david-fernando', 'stage_name' => null, 'bio' => 'Bilingual MC with charismatic personality', 'short_description' => 'Bilingual MC with charismatic personality', 'base_price' => 20000.00, 'price_unit' => 'event', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Professional', 'years_experience' => 12, 'languages' => '["English", "Sinhala", "Tamil"]', 'specialties' => '["Weddings", "Corporate Events", "Award Shows"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 2, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.90, 'total_reviews' => 39, 'total_bookings' => 0, 'badge' => 'Most Popular', 'badge_class' => null, 'sort_order' => 0, 'featured' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 6, 'service_category_id' => 5, 'name' => 'The Groove Masters', 'slug' => 'the-groove-masters', 'stage_name' => null, 'bio' => '6-piece band specializing in contemporary and classic hits', 'short_description' => '6-piece band specializing in contemporary and classic hits', 'base_price' => 50000.00, 'price_unit' => 'event', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Premium', 'years_experience' => 15, 'languages' => '["English", "Sinhala"]', 'specialties' => '["Pop", "Rock", "Jazz", "Soul"]', 'equipment_owned' => null, 'equipment_provided' => 1, 'min_booking_hours' => 3, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.70, 'total_reviews' => 46, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 7, 'service_category_id' => 6, 'name' => 'James Wilson', 'slug' => 'james-wilson', 'stage_name' => null, 'bio' => 'Certified sound engineer with expertise in live events', 'short_description' => 'Certified sound engineer with expertise in live events', 'base_price' => 15000.00, 'price_unit' => 'day', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Professional', 'years_experience' => 8, 'languages' => '["English"]', 'specialties' => '["Live Mixing", "System Setup", "Recording"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.60, 'total_reviews' => 39, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 8, 'service_category_id' => 7, 'name' => 'Kumar Perera', 'slug' => 'kumar-perera', 'stage_name' => null, 'bio' => 'Creative lighting designer for events and shows', 'short_description' => 'Creative lighting designer for events and shows', 'base_price' => 12000.00, 'price_unit' => 'day', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Professional', 'years_experience' => 6, 'languages' => '["English", "Sinhala"]', 'specialties' => '["Stage Lighting", "Architectural Lighting", "Effects"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.50, 'total_reviews' => 16, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 9, 'service_category_id' => 8, 'name' => 'Lisa Anderson', 'slug' => 'lisa-anderson', 'stage_name' => null, 'bio' => 'Award-winning photographer specializing in events', 'short_description' => 'Award-winning photographer specializing in events', 'base_price' => 35000.00, 'price_unit' => 'event', 'features' => '["High-resolution images", "Post-production editing", "Online gallery", "Print-ready files", "Quick turnaround"]', 'experience_level' => 'Premium', 'years_experience' => 10, 'languages' => '["English"]', 'specialties' => '["Weddings", "Corporate", "Fashion", "Product"]', 'equipment_owned' => '["Canon 5D Mark IV", "Professional Lenses", "Studio Lights"]', 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 5.00, 'total_reviews' => 46, 'total_bookings' => 0, 'badge' => 'Award Winner', 'badge_class' => null, 'sort_order' => 0, 'featured' => 1, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 10, 'service_category_id' => 8, 'name' => 'Raj Kumar', 'slug' => 'raj-kumar', 'stage_name' => null, 'bio' => 'Creative photographer with unique perspective', 'short_description' => 'Creative photographer with unique perspective', 'base_price' => 25000.00, 'price_unit' => 'event', 'features' => '["High-resolution images", "Post-production editing", "Online gallery", "Print-ready files", "Quick turnaround"]', 'experience_level' => 'Professional', 'years_experience' => 7, 'languages' => '["English", "Tamil"]', 'specialties' => '["Events", "Portraits", "Documentary"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.70, 'total_reviews' => 30, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 11, 'service_category_id' => 9, 'name' => 'Chris Martin', 'slug' => 'chris-martin', 'stage_name' => null, 'bio' => '4K videography specialist with cinematic style', 'short_description' => '4K videography specialist with cinematic style', 'base_price' => 40000.00, 'price_unit' => 'event', 'features' => '["4K video quality", "Professional editing", "Highlight reel", "Full event coverage", "Digital delivery"]', 'experience_level' => 'Premium', 'years_experience' => 9, 'languages' => '["English"]', 'specialties' => '["Weddings", "Corporate Videos", "Music Videos"]', 'equipment_owned' => '["RED Camera", "Drone", "Gimbal", "Professional Audio"]', 'equipment_provided' => 0, 'min_booking_hours' => 4, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.90, 'total_reviews' => 38, 'total_bookings' => 0, 'badge' => '4K Specialist', 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 12, 'service_category_id' => 10, 'name' => 'Emma Thompson', 'slug' => 'emma-thompson', 'stage_name' => null, 'bio' => 'Certified event planner with attention to detail', 'short_description' => 'Certified event planner with attention to detail', 'base_price' => 20000.00, 'price_unit' => 'day', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Professional', 'years_experience' => 8, 'languages' => '["English", "Sinhala"]', 'specialties' => '["Wedding Planning", "Corporate Events", "Private Parties"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 8, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.80, 'total_reviews' => 35, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+            ['id' => 13, 'service_category_id' => 11, 'name' => 'Professional Ushering Services', 'slug' => 'professional-ushering-services', 'stage_name' => null, 'bio' => 'Team of trained ushers for all events', 'short_description' => 'Team of trained ushers for all events', 'base_price' => 5000.00, 'price_unit' => 'person/day', 'features' => '["Professional service", "Experienced provider", "Quality guaranteed"]', 'experience_level' => 'Entry', 'years_experience' => 3, 'languages' => '["English", "Sinhala", "Tamil"]', 'specialties' => '["Guest Management", "Crowd Control", "VIP Services"]', 'equipment_owned' => null, 'equipment_provided' => 0, 'min_booking_hours' => 8, 'max_booking_hours' => null, 'availability' => null, 'portfolio_links' => null, 'rating' => 4.40, 'total_reviews' => 20, 'total_bookings' => 0, 'badge' => null, 'badge_class' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-02 18:19:56', 'updated_at' => '2025-07-02 18:19:56'],
+        ]);
+
+        // Seed Service Provider Media
+        $serviceProviderMedia = [];
+        $mediaData = [
+            [2, 'photo', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'DJ Setup', null, 0, 1],
+            [2, 'photo', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'Live Performance', null, 1, 0],
+            [2, 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://via.placeholder.com/400x300', 'Performance Highlights', null, 2, 0],
+            [3, 'photo', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'DJ Setup', null, 0, 1],
+            [3, 'photo', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'Live Performance', null, 1, 0],
+            [3, 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://via.placeholder.com/400x300', 'Performance Highlights', null, 2, 0],
+            [4, 'photo', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800', 'DJ Setup', null, 0, 1],
+            [4, 'photo', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=800', 'Live Performance', null, 1, 0],
+            [4, 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://via.placeholder.com/400x300', 'Performance Highlights', null, 2, 0],
+            [5, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
+            [6, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
+            [7, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
+            [8, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
+            [9, 'photo', 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800', 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800', 'Wedding Photography', null, 0, 1],
+            [9, 'photo', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'Event Coverage', null, 1, 0],
+            [9, 'photo', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800', 'Portrait Work', null, 2, 0],
+            [10, 'photo', 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800', 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800', 'Wedding Photography', null, 0, 1],
+            [10, 'photo', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800', 'Event Coverage', null, 1, 0],
+            [10, 'photo', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800', 'Portrait Work', null, 2, 0],
+            [11, 'photo', 'https://images.unsplash.com/photo-1579632652768-6cb9dcf85912?w=800', 'https://images.unsplash.com/photo-1579632652768-6cb9dcf85912?w=800', 'Video Production', null, 0, 1],
+            [11, 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://via.placeholder.com/400x300', 'Wedding Highlights', null, 1, 0],
+            [12, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
+            [13, 'photo', 'https://via.placeholder.com/800x600', 'https://via.placeholder.com/800x600', 'Portfolio Image', null, 0, 1],
         ];
 
-        foreach ($categories as $index => $categoryData) {
-            $category = Category::create([
-                'name' => $categoryData['name'],
-                'slug' => $categoryData['slug'],
-                'icon' => $categoryData['icon'],
-                'description' => $categoryData['description'],
-                'sort_order' => $index,
-                'show_on_homepage' => true,
-                'status' => 'active',
-            ]);
-
-            // Create products for each category
-            $this->createProductsForCategory($category);
+        $id = 1;
+        foreach ($mediaData as $media) {
+            $serviceProviderMedia[] = [
+                'id' => $id++,
+                'service_provider_id' => $media[0],
+                'type' => $media[1],
+                'url' => $media[2],
+                'thumbnail_url' => $media[3],
+                'title' => $media[4],
+                'description' => $media[5],
+                'sort_order' => $media[6],
+                'is_featured' => $media[7],
+                'created_at' => '2025-07-02 18:19:56',
+                'updated_at' => '2025-07-02 18:19:56',
+            ];
         }
+        DB::table('service_provider_media')->insert($serviceProviderMedia);
 
-        // Create services
-        $this->createServices();
-
-        // Create packages
-        $this->createPackages();
-
-        $this->command->info('Database seeded successfully!');
-    }
-
-    private function createProductsForCategory($category)
-    {
-        $productsByCategory = [
-            'sound-equipment' => [
-                [
-                    'name' => 'JBL Professional PA System',
-                    'brand' => 'JBL',
-                    'base_price' => 15000,
-                    'subcategory' => 'PA Systems',
-                    'short_description' => 'Professional-grade PA system perfect for corporate events, weddings, and conferences. Features crystal-clear audio output with 1000W RMS power.',
-                    'featured' => true,
-                    'variations' => [
-                        ['name' => '500W System', 'price' => 10000],
-                        ['name' => '1000W System', 'price' => 15000],
-                        ['name' => '1500W System', 'price' => 20000],
-                    ]
-                ],
-                [
-                    'name' => 'Yamaha MG16XU 16-Channel Mixer',
-                    'brand' => 'Yamaha',
-                    'base_price' => 8000,
-                    'subcategory' => 'Mixers',
-                    'short_description' => '16-channel mixing console with built-in effects and USB audio interface.',
-                ],
-                [
-                    'name' => 'Shure BLX Wireless Microphone Set',
-                    'brand' => 'Shure',
-                    'base_price' => 5000,
-                    'subcategory' => 'Microphones',
-                    'short_description' => 'Professional wireless microphone system with reliable UHF performance.',
-                ],
-            ],
-            'lighting' => [
-                [
-                    'name' => 'LED Par Light Set (12 Units)',
-                    'brand' => 'Chauvet',
-                    'base_price' => 8000,
-                    'subcategory' => 'LED Lights',
-                    'short_description' => 'RGB LED par lights with DMX control for vibrant stage lighting.',
-                    'featured' => true,
-                ],
-                [
-                    'name' => 'Moving Head Spot Light',
-                    'brand' => 'Martin',
-                    'base_price' => 12000,
-                    'subcategory' => 'Moving Heads',
-                    'short_description' => 'Professional moving head with gobo patterns and color wheels.',
-                ],
-                [
-                    'name' => 'LED Uplighting Package',
-                    'brand' => 'ADJ',
-                    'base_price' => 6000,
-                    'subcategory' => 'Uplighting',
-                    'short_description' => 'Wireless LED uplights for ambient venue lighting.',
-                ],
-            ],
-            'led-screens' => [
-                [
-                    'name' => 'P3.91 Indoor LED Wall (3x2m)',
-                    'brand' => 'Absen',
-                    'base_price' => 25000,
-                    'short_description' => 'High-resolution indoor LED video wall perfect for presentations.',
-                    'featured' => true,
-                ],
-                [
-                    'name' => 'P4.81 Outdoor LED Screen',
-                    'brand' => 'Novastar',
-                    'base_price' => 30000,
-                    'short_description' => 'Weather-resistant outdoor LED display for large events.',
-                ],
-            ],
-            'dj-equipment' => [
-                [
-                    'name' => 'Pioneer DDJ-FLX6 Controller',
-                    'brand' => 'Pioneer',
-                    'base_price' => 12000,
-                    'short_description' => '4-channel DJ controller with Serato DJ Pro compatibility.',
-                    'featured' => true,
-                ],
-                [
-                    'name' => 'Technics SL-1200 Turntables (Pair)',
-                    'brand' => 'Technics',
-                    'base_price' => 18000,
-                    'short_description' => 'Industry-standard direct drive turntables for professional DJs.',
-                ],
-            ],
-            'tables-chairs' => [
-                [
-                    'name' => 'Round Banquet Table (10 pax)',
-                    'brand' => 'Generic',
-                    'base_price' => 500,
-                    'short_description' => 'Standard round banquet table with white tablecloth.',
-                    'variations' => [
-                        ['name' => '6 pax table', 'price' => 400],
-                        ['name' => '8 pax table', 'price' => 450],
-                        ['name' => '10 pax table', 'price' => 500],
-                    ]
-                ],
-                [
-                    'name' => 'Chiavari Chairs',
-                    'brand' => 'Generic',
-                    'base_price' => 150,
-                    'short_description' => 'Elegant Chiavari chairs available in gold, silver, or white.',
-                    'variations' => [
-                        ['name' => 'Gold', 'price' => 150],
-                        ['name' => 'Silver', 'price' => 150],
-                        ['name' => 'White', 'price' => 150],
-                    ]
-                ],
-            ],
+        // Seed Service Provider Pricing
+        $serviceProviderPricing = [];
+        $pricingData = [
+            [2, 'Basic (4 hours)', 25000.00, '4 hours', '["Basic sound system", "DJ performance", "Basic lighting"]', null, 0, 0],
+            [2, 'Standard (6 hours)', 35000.00, '6 hours', '["Professional sound system", "DJ performance", "Light show", "MC services"]', null, 1, 1],
+            [2, 'Premium (8 hours)', 45000.00, '8 hours', '["Premium sound system", "DJ performance", "Full light show", "MC services", "Special effects"]', null, 2, 0],
+            [3, 'Basic (4 hours)', 30000.00, '4 hours', '["Basic sound system", "DJ performance", "Basic lighting"]', null, 0, 0],
+            [3, 'Standard (6 hours)', 42000.00, '6 hours', '["Professional sound system", "DJ performance", "Light show", "MC services"]', null, 1, 1],
+            [3, 'Premium (8 hours)', 54000.00, '8 hours', '["Premium sound system", "DJ performance", "Full light show", "MC services", "Special effects"]', null, 2, 0],
+            [4, 'Basic (4 hours)', 20000.00, '4 hours', '["Basic sound system", "DJ performance", "Basic lighting"]', null, 0, 0],
+            [4, 'Standard (6 hours)', 28000.00, '6 hours', '["Professional sound system", "DJ performance", "Light show", "MC services"]', null, 1, 1],
+            [4, 'Premium (8 hours)', 36000.00, '8 hours', '["Premium sound system", "DJ performance", "Full light show", "MC services", "Special effects"]', null, 2, 0],
+            [5, 'Standard', 20000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [6, 'Standard', 50000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [7, 'Standard', 15000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [8, 'Standard', 12000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [9, 'Half Day', 35000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [9, 'Full Day', 63000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 1, 1],
+            [9, 'Full Day + Album', 77000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 2, 0],
+            [10, 'Half Day', 25000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [10, 'Full Day', 45000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 1, 1],
+            [10, 'Full Day + Album', 55000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 2, 0],
+            [11, 'Highlights Only', 28000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [11, 'Full Coverage', 40000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 1, 1],
+            [11, 'Cinematic Package', 60000.00, '8 hours', '["Professional service", "Quality guaranteed"]', null, 2, 0],
+            [12, 'Standard', 20000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
+            [13, 'Standard', 5000.00, '4 hours', '["Professional service", "Quality guaranteed"]', null, 0, 0],
         ];
 
-        $products = $productsByCategory[$category->slug] ?? [];
-
-        foreach ($products as $index => $productData) {
-            $product = Product::create([
-                'category_id' => $category->id,
-                'name' => $productData['name'],
-                'slug' => Str::slug($productData['name']),
-                'sku' => strtoupper(substr($category->slug, 0, 3)) . '-' . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
-                'brand' => $productData['brand'],
-                'subcategory' => $productData['subcategory'] ?? null,
-                'short_description' => $productData['short_description'],
-                'base_price' => $productData['base_price'],
-                'price_unit' => 'day',
-                'min_quantity' => 1,
-                'max_quantity' => 10,
-                'available_quantity' => rand(5, 20),
-                'featured' => $productData['featured'] ?? false,
-                'status' => 'active',
-                'included_items' => json_encode($this->getIncludedItems($category->slug)),
-            ]);
-
-            // Create inventory record
-            Inventory::create([
-                'product_id' => $product->id,
-                'total_quantity' => $product->available_quantity,
-                'available_quantity' => $product->available_quantity,
-                'location' => 'Warehouse A',
-                'status' => 'active',
-            ]);
-
-            // Create variations if any
-            if (isset($productData['variations'])) {
-                foreach ($productData['variations'] as $variationIndex => $variation) {
-                    $productVariation = ProductVariation::create([
-                        'product_id' => $product->id,
-                        'name' => $variation['name'],
-                        'sku' => $product->sku . '-V' . ($variationIndex + 1),
-                        'price' => $variation['price'],
-                        'available_quantity' => rand(3, 10),
-                        'status' => 'active',
-                    ]);
-
-                    // Create inventory for variation
-                    Inventory::create([
-                        'product_id' => $product->id,
-                        'product_variation_id' => $productVariation->id,
-                        'total_quantity' => $productVariation->available_quantity,
-                        'available_quantity' => $productVariation->available_quantity,
-                        'location' => 'Warehouse A',
-                        'status' => 'active',
-                    ]);
-                }
-            }
+        $id = 4; // Starting from 4 as per the SQL dump
+        foreach ($pricingData as $pricing) {
+            $serviceProviderPricing[] = [
+                'id' => $id++,
+                'service_provider_id' => $pricing[0],
+                'tier_name' => $pricing[1],
+                'price' => $pricing[2],
+                'duration' => $pricing[3],
+                'included_features' => $pricing[4],
+                'additional_costs' => $pricing[5],
+                'sort_order' => $pricing[6],
+                'is_popular' => $pricing[7],
+                'created_at' => '2025-07-02 18:19:56',
+                'updated_at' => '2025-07-02 18:19:56',
+            ];
         }
-    }
+        DB::table('service_provider_pricing')->insert($serviceProviderPricing);
 
-    private function createServices()
-    {
-        $services = [
-            // Entertainment
-            [
-                'name' => 'Professional DJs',
-                'slug' => 'professional-djs',
-                'category' => 'Entertainment',
-                'starting_price' => 25000,
-                'price_unit' => 'event',
-                'features' => [
-                    'Experienced club & event DJs',
-                    'All music genres available',
-                    'Professional DJ equipment included',
-                    '4-8 hours performance'
-                ],
-                'badge' => 'Most Popular',
-                'featured' => true,
-            ],
-            [
-                'name' => 'Professional Emcees',
-                'slug' => 'professional-emcees',
-                'category' => 'Entertainment',
-                'starting_price' => 20000,
-                'price_unit' => 'event',
-                'features' => [
-                    'Bilingual emcees available',
-                    'Corporate & wedding specialists',
-                    'Professional attire included',
-                    'Script coordination service'
-                ],
-            ],
-            [
-                'name' => 'Live Bands',
-                'slug' => 'live-bands',
-                'category' => 'Entertainment',
-                'starting_price' => 60000,
-                'price_unit' => 'event',
-                'features' => [
-                    '4-8 piece band configurations',
-                    'Jazz, pop, rock, classical',
-                    'Professional sound included',
-                    '2-4 hours performance sets'
-                ],
-                'badge' => 'Premium',
-            ],
-            // Technical Crew
-            [
-                'name' => 'Sound Engineers',
-                'slug' => 'sound-engineers',
-                'category' => 'Technical Crew',
-                'starting_price' => 15000,
-                'price_unit' => 'day',
-                'features' => [
-                    'Professional audio mixing',
-                    'Equipment setup & operation',
-                    'Live sound management',
-                    'Technical troubleshooting'
-                ],
-            ],
-            [
-                'name' => 'Lighting Engineers',
-                'slug' => 'lighting-engineers',
-                'category' => 'Technical Crew',
-                'starting_price' => 18000,
-                'price_unit' => 'day',
-                'features' => [
-                    'Professional lighting design',
-                    'DMX programming & operation',
-                    'Effect lighting coordination',
-                    'Full event coverage'
-                ],
-            ],
-            // Media Production
-            [
-                'name' => 'Videographers',
-                'slug' => 'videographers',
-                'category' => 'Media Production',
-                'starting_price' => 40000,
-                'price_unit' => 'event',
-                'features' => [
-                    '4K professional videography',
-                    'Multi-camera coverage',
-                    'Drone footage available',
-                    'Same-day highlights option'
-                ],
-                'badge' => '4K Video',
-            ],
-            [
-                'name' => 'Photographers',
-                'slug' => 'photographers',
-                'category' => 'Media Production',
-                'starting_price' => 30000,
-                'price_unit' => 'event',
-                'features' => [
-                    'Professional event photography',
-                    'Candid & portrait shots',
-                    'Instant photo sharing',
-                    'Post-production editing'
-                ],
-            ],
-        ];
+        // Seed Packages
+        DB::table('packages')->insert([
+            ['id' => 1, 'name' => 'Basic Package', 'slug' => 'basic-package', 'description' => 'Perfect for small events :)', 'category' => 'Basic', 'price' => 45000.00, 'suitable_for' => '50-100 pax', 'features' => '["Basic Sound System", "8 LED Par Lights", "1 Wireless Microphone", "Basic DJ Setup", "4 Hours Service", "1 Technician"]', 'items' => '[]', 'service_duration' => 4, 'badge' => null, 'image' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-04 21:50:02'],
+            ['id' => 2, 'name' => 'Professional Package', 'slug' => 'professional-package', 'description' => 'Ideal for corporate events', 'category' => 'Professional', 'price' => 85000.00, 'suitable_for' => '100-300 pax', 'features' => '["Professional PA System", "Stage Lighting Setup", "2 Wireless Microphones", "Professional DJ", "LED Screen (2x1m)", "8 Hours Service", "2 Technicians"]', 'items' => null, 'service_duration' => 8, 'badge' => 'Most Popular', 'image' => null, 'sort_order' => 0, 'featured' => 1, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 3, 'name' => 'Premium Package', 'slug' => 'premium-package', 'description' => 'For large-scale events', 'category' => 'Premium', 'price' => 150000.00, 'suitable_for' => '300+ pax', 'features' => '["Line Array Sound System", "Full Stage Lighting", "4 Wireless Microphones", "Professional DJ & Emcee", "LED Wall (4x3m)", "Special Effects", "Full Day Service", "Full Technical Team"]', 'items' => null, 'service_duration' => 12, 'badge' => null, 'image' => null, 'sort_order' => 0, 'featured' => 0, 'status' => 'active', 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+        ]);
 
-        foreach ($services as $serviceData) {
-            Service::create([
-                'name' => $serviceData['name'],
-                'slug' => $serviceData['slug'],
-                'category' => $serviceData['category'],
-                'starting_price' => $serviceData['starting_price'],
-                'price_unit' => $serviceData['price_unit'],
-                'features' => json_encode($serviceData['features']),
-                'badge' => $serviceData['badge'] ?? null,
-                'featured' => $serviceData['featured'] ?? false,
-                'status' => 'active',
-            ]);
-        }
-    }
+        // Seed Customers
+        DB::table('customers')->insert([
+            ['id' => 3, 'user_id' => 8, 'phone' => '+60123456789', 'address' => '123 Main Street, Kuala Lumpur', 'company' => 'Test Company Sdn Bhd', 'company_registration' => null, 'tax_id' => null, 'customer_type' => 'corporate', 'total_bookings' => 0, 'total_spent' => 0.00, 'last_booking_date' => null, 'preferences' => null, 'newsletter_subscribed' => 0, 'sms_notifications' => 0, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 4, 'user_id' => 9, 'phone' => '+94701614804', 'address' => 'No 76 Kanda', 'company' => 'tekiYa', 'company_registration' => null, 'tax_id' => null, 'customer_type' => 'individual', 'total_bookings' => 8, 'total_spent' => 197000.00, 'last_booking_date' => '2025-07-04', 'preferences' => null, 'newsletter_subscribed' => 0, 'sms_notifications' => 1, 'created_at' => '2025-07-03 18:23:31', 'updated_at' => '2025-07-03 22:48:11'],
+        ]);
 
-    private function createPackages()
-    {
-        $packages = [
-            [
-                'name' => 'Basic Package',
-                'slug' => 'basic-package',
-                'category' => 'Basic',
-                'price' => 45000,
-                'suitable_for' => '50-100 pax',
-                'description' => 'Perfect for small events',
-                'features' => [
-                    'Basic Sound System',
-                    '8 LED Par Lights',
-                    '1 Wireless Microphone',
-                    'Basic DJ Setup',
-                    '4 Hours Service',
-                    '1 Technician'
-                ],
-                'service_duration' => 4,
-            ],
-            [
-                'name' => 'Professional Package',
-                'slug' => 'professional-package',
-                'category' => 'Professional',
-                'price' => 85000,
-                'suitable_for' => '100-300 pax',
-                'description' => 'Ideal for corporate events',
-                'features' => [
-                    'Professional PA System',
-                    'Stage Lighting Setup',
-                    '2 Wireless Microphones',
-                    'Professional DJ',
-                    'LED Screen (2x1m)',
-                    '8 Hours Service',
-                    '2 Technicians'
-                ],
-                'badge' => 'Most Popular',
-                'featured' => true,
-                'service_duration' => 8,
-            ],
-            [
-                'name' => 'Premium Package',
-                'slug' => 'premium-package',
-                'category' => 'Premium',
-                'price' => 150000,
-                'suitable_for' => '300+ pax',
-                'description' => 'For large-scale events',
-                'features' => [
-                    'Line Array Sound System',
-                    'Full Stage Lighting',
-                    '4 Wireless Microphones',
-                    'Professional DJ & Emcee',
-                    'LED Wall (4x3m)',
-                    'Special Effects',
-                    'Full Day Service',
-                    'Full Technical Team'
-                ],
-                'service_duration' => 12,
-            ],
-        ];
+        // Seed Bookings
+        DB::table('bookings')->insert([
+            ['id' => 1, 'booking_number' => 'KLM-2025-DCUXPQ', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'wedding', 'venue' => 'asadsdasdasd', 'number_of_pax' => 10, 'installation_time' => '06:54:00', 'event_start_time' => '07:55:00', 'dismantle_time' => '19:55:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 20000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 20500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0072EUp12UM8d0IVhX1SV', 'paid_at' => '2025-07-03 21:39:58', 'booking_status' => 'completed', 'delivery_address' => 'asdasdasd', 'delivery_instructions' => null, 'delivery_status' => 'picked_up', 'special_requests' => 'asdasdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 21:39:58', 'updated_at' => '2025-07-04 21:10:57'],
+            ['id' => 2, 'booking_number' => 'KLM-2025-TDX1BT', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'birthday', 'venue' => 'zzZXZX', 'number_of_pax' => 20, 'installation_time' => '08:56:00', 'event_start_time' => '10:58:00', 'dismantle_time' => '13:01:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 15000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 15500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0HP2EUp12UM8d1k53jS0f', 'paid_at' => '2025-07-03 21:57:44', 'booking_status' => 'confirmed', 'delivery_address' => 'asdasdasd', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asdasdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 21:57:44', 'updated_at' => '2025-07-03 21:57:44'],
+            ['id' => 3, 'booking_number' => 'KLM-2025-VCNLHM', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'corporate', 'venue' => 'asdasdasd', 'number_of_pax' => 20, 'installation_time' => '09:04:00', 'event_start_time' => '10:05:00', 'dismantle_time' => '11:05:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 15000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 15500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0OK2EUp12UM8d1lFtKGbZ', 'paid_at' => '2025-07-03 22:04:41', 'booking_status' => 'confirmed', 'delivery_address' => 'asdasdasd', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:04:41', 'updated_at' => '2025-07-03 22:04:41'],
+            ['id' => 4, 'booking_number' => 'KLM-2025-J0WE7E', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'birthday', 'venue' => 'asdasd', 'number_of_pax' => 10, 'installation_time' => '09:09:00', 'event_start_time' => '10:09:00', 'dismantle_time' => '11:09:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 8000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 8500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0Tn2EUp12UM8d140sbgQg', 'paid_at' => '2025-07-03 22:10:18', 'booking_status' => 'confirmed', 'delivery_address' => 'asdasdasd', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:10:18', 'updated_at' => '2025-07-03 22:10:18'],
+            ['id' => 5, 'booking_number' => 'KLM-2025-NJWZYZ', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'birthday', 'venue' => 'asdasd', 'number_of_pax' => 10, 'installation_time' => '09:14:00', 'event_start_time' => '10:14:00', 'dismantle_time' => '11:14:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 15000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 15500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0Xu2EUp12UM8d0NCxKT3c', 'paid_at' => '2025-07-03 22:14:34', 'booking_status' => 'confirmed', 'delivery_address' => 'asdasdasd', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:14:34', 'updated_at' => '2025-07-03 22:14:34'],
+            ['id' => 6, 'booking_number' => 'KLM-2025-AFKQEI', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'corporate', 'venue' => 'asdasdad', 'number_of_pax' => 20, 'installation_time' => '09:38:00', 'event_start_time' => '10:38:00', 'dismantle_time' => '11:38:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 85000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 85500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0vY2EUp12UM8d115Ohkuw', 'paid_at' => '2025-07-03 22:39:00', 'booking_status' => 'confirmed', 'delivery_address' => 'No 76 Kanda', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:39:00', 'updated_at' => '2025-07-03 22:39:00'],
+            ['id' => 7, 'booking_number' => 'KLM-2025-VDXEPT', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'birthday', 'venue' => 'asdasd', 'number_of_pax' => 20, 'installation_time' => '09:41:00', 'event_start_time' => '10:41:00', 'dismantle_time' => '11:41:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 20000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 20500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh0yg2EUp12UM8d0wvPGT61', 'paid_at' => '2025-07-03 22:42:15', 'booking_status' => 'confirmed', 'delivery_address' => 'No 76 Kanda', 'delivery_instructions' => null, 'delivery_status' => 'pending', 'special_requests' => 'asasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:42:15', 'updated_at' => '2025-07-03 22:42:15'],
+            ['id' => 8, 'booking_number' => 'KLM-2025-GTBLWD', 'customer_id' => 4, 'event_date' => '2025-07-05', 'event_type' => 'wedding', 'venue' => 'asdasd', 'number_of_pax' => 10, 'installation_time' => '09:47:00', 'event_start_time' => '10:47:00', 'dismantle_time' => '11:47:00', 'rental_start_date' => '2025-07-05', 'rental_end_date' => '2025-07-05', 'rental_days' => 1, 'subtotal' => 15000.00, 'discount_amount' => 0.00, 'coupon_code' => null, 'tax_amount' => 0.00, 'delivery_charge' => 500.00, 'total' => 15500.00, 'payment_status' => 'paid', 'payment_method' => 'stripe', 'stripe_payment_intent_id' => 'pi_3Rh14P2EUp12UM8d0t4uJHKc', 'paid_at' => '2025-07-03 22:48:11', 'booking_status' => 'completed', 'delivery_address' => 'No 76 Kanda', 'delivery_instructions' => null, 'delivery_status' => 'delivered', 'special_requests' => 'asdasd', 'internal_notes' => null, 'insurance_opted' => 0, 'insurance_amount' => 0.00, 'customer_name' => 'A.G.T. Kaushalya Wickramasinghe', 'customer_email' => 'tekiyagaming@gmail.com', 'customer_phone' => '+94701614804', 'customer_company' => 'tekiYa', 'created_at' => '2025-07-03 22:48:11', 'updated_at' => '2025-07-04 21:12:30'],
+        ]);
 
-        foreach ($packages as $packageData) {
-            Package::create([
-                'name' => $packageData['name'],
-                'slug' => $packageData['slug'],
-                'category' => $packageData['category'],
-                'price' => $packageData['price'],
-                'suitable_for' => $packageData['suitable_for'],
-                'description' => $packageData['description'],
-                'features' => json_encode($packageData['features']),
-                'badge' => $packageData['badge'] ?? null,
-                'featured' => $packageData['featured'] ?? false,
-                'service_duration' => $packageData['service_duration'],
-                'status' => 'active',
-            ]);
-        }
-    }
+        // Seed Booking Items
+        DB::table('booking_items')->insert([
+            ['id' => 1, 'booking_id' => 1, 'item_type' => 'service_provider', 'item_id' => 5, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'David Fernando - Standard', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 20000.00, 'total_price' => 20000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => '"{\\"pricing_tier_id\\":\\"13\\",\\"duration\\":4,\\"start_time\\":\\"06:50\\"}"', 'addons_price' => 0.00, 'status' => 'returned', 'delivered_at' => '2025-07-04 21:04:46', 'returned_at' => '2025-07-04 21:10:57', 'notes' => null, 'created_at' => '2025-07-03 21:39:58', 'updated_at' => '2025-07-04 21:10:57'],
+            ['id' => 2, 'booking_id' => 2, 'item_type' => 'product', 'item_id' => 1, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'JBL Professional PA System', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 15000.00, 'total_price' => 15000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 21:57:44', 'updated_at' => '2025-07-03 21:57:44'],
+            ['id' => 3, 'booking_id' => 3, 'item_type' => 'product', 'item_id' => 1, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'JBL Professional PA System', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 15000.00, 'total_price' => 15000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:04:41', 'updated_at' => '2025-07-03 22:04:41'],
+            ['id' => 4, 'booking_id' => 4, 'item_type' => 'product', 'item_id' => 4, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'LED Par Light Set (12 Units)', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 8000.00, 'total_price' => 8000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:10:18', 'updated_at' => '2025-07-03 22:10:18'],
+            ['id' => 5, 'booking_id' => 5, 'item_type' => 'product', 'item_id' => 1, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'JBL Professional PA System', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 15000.00, 'total_price' => 15000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:14:34', 'updated_at' => '2025-07-03 22:14:34'],
+            ['id' => 6, 'booking_id' => 6, 'item_type' => 'package', 'item_id' => 2, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'Professional Package', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 85000.00, 'total_price' => 85000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:39:00', 'updated_at' => '2025-07-03 22:39:00'],
+            ['id' => 7, 'booking_id' => 7, 'item_type' => 'service_provider', 'item_id' => 12, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'Emma Thompson - Standard', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 20000.00, 'total_price' => 20000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => '"{\\"pricing_tier_id\\":\\"26\\",\\"duration\\":4,\\"start_time\\":\\"09:41\\"}"', 'addons_price' => 0.00, 'status' => 'pending', 'delivered_at' => null, 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:42:15', 'updated_at' => '2025-07-03 22:42:15'],
+            ['id' => 8, 'booking_id' => 8, 'item_type' => 'product', 'item_id' => 1, 'service_provider_id' => null, 'service_provider_pricing_id' => null, 'item_name' => 'JBL Professional PA System', 'item_sku' => null, 'product_variation_id' => null, 'variation_name' => null, 'quantity' => 1, 'unit_price' => 15000.00, 'total_price' => 15000.00, 'rental_days' => 1, 'start_time' => null, 'end_time' => null, 'selected_addons' => null, 'addons_price' => 0.00, 'status' => 'delivered', 'delivered_at' => '2025-07-04 21:12:30', 'returned_at' => null, 'notes' => null, 'created_at' => '2025-07-03 22:48:11', 'updated_at' => '2025-07-04 21:12:30'],
+        ]);
 
-    private function getIncludedItems($categorySlug)
-    {
-        $includedItems = [
-            'sound-equipment' => [
-                '2x Professional Speakers',
-                '2x Speaker Stands',
-                'Mixing Console',
-                'All Necessary Cables',
-                'Power Distribution',
-                'Setup & Testing'
-            ],
-            'lighting' => [
-                'Complete Light Set',
-                'DMX Controller',
-                'Lighting Stands/Trusses',
-                'Power & DMX Cables',
-                'Safety Equipment',
-                'Programming Service'
-            ],
-            'led-screens' => [
-                'LED Panel Modules',
-                'Processing Unit',
-                'Mounting Structure',
-                'Power Distribution',
-                'Content Management',
-                'Technical Support'
-            ],
-            'dj-equipment' => [
-                'DJ Controller/Turntables',
-                'DJ Mixer',
-                'Headphones',
-                'All Cables',
-                'Laptop Stand',
-                'Basic Lighting'
-            ],
-        ];
+        // Seed Inventory
+        DB::table('inventory')->insert([
+            ['id' => 1, 'product_id' => 1, 'product_variation_id' => null, 'total_quantity' => 19, 'available_quantity' => 19, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 2, 'product_id' => 1, 'product_variation_id' => 1, 'total_quantity' => 6, 'available_quantity' => 6, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 3, 'product_id' => 1, 'product_variation_id' => 2, 'total_quantity' => 9, 'available_quantity' => 9, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 4, 'product_id' => 1, 'product_variation_id' => 3, 'total_quantity' => 7, 'available_quantity' => 7, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 5, 'product_id' => 2, 'product_variation_id' => null, 'total_quantity' => 17, 'available_quantity' => 17, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 6, 'product_id' => 3, 'product_variation_id' => null, 'total_quantity' => 16, 'available_quantity' => 16, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 7, 'product_id' => 4, 'product_variation_id' => null, 'total_quantity' => 9, 'available_quantity' => 9, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 8, 'product_id' => 5, 'product_variation_id' => null, 'total_quantity' => 13, 'available_quantity' => 13, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 9, 'product_id' => 6, 'product_variation_id' => null, 'total_quantity' => 12, 'available_quantity' => 12, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 10, 'product_id' => 7, 'product_variation_id' => null, 'total_quantity' => 13, 'available_quantity' => 13, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 11, 'product_id' => 8, 'product_variation_id' => null, 'total_quantity' => 14, 'available_quantity' => 14, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 12, 'product_id' => 9, 'product_variation_id' => null, 'total_quantity' => 6, 'available_quantity' => 6, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 13, 'product_id' => 10, 'product_variation_id' => null, 'total_quantity' => 7, 'available_quantity' => 7, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 14, 'product_id' => 11, 'product_variation_id' => null, 'total_quantity' => 13, 'available_quantity' => 13, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 15, 'product_id' => 11, 'product_variation_id' => 4, 'total_quantity' => 7, 'available_quantity' => 7, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 16, 'product_id' => 11, 'product_variation_id' => 5, 'total_quantity' => 6, 'available_quantity' => 6, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 17, 'product_id' => 11, 'product_variation_id' => 6, 'total_quantity' => 4, 'available_quantity' => 4, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 18, 'product_id' => 12, 'product_variation_id' => null, 'total_quantity' => 17, 'available_quantity' => 17, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 19, 'product_id' => 12, 'product_variation_id' => 7, 'total_quantity' => 8, 'available_quantity' => 8, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 20, 'product_id' => 12, 'product_variation_id' => 8, 'total_quantity' => 10, 'available_quantity' => 10, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+            ['id' => 21, 'product_id' => 12, 'product_variation_id' => 9, 'total_quantity' => 8, 'available_quantity' => 8, 'reserved_quantity' => 0, 'maintenance_quantity' => 0, 'location' => 'Warehouse A', 'warehouse_section' => null, 'last_maintenance_date' => null, 'next_maintenance_date' => null, 'status' => 'active', 'notes' => null, 'created_at' => '2025-07-01 07:37:06', 'updated_at' => '2025-07-01 07:37:06'],
+        ]);
 
-        return $includedItems[$categorySlug] ?? ['Equipment as described', 'Basic accessories', 'Setup guide'];
+        // Seed Cache
+        DB::table('cache')->insert([
+            ['key' => 'kl_mobile_dj_events_cache_livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'value' => 'i:1;', 'expiration' => 1751688452],
+            ['key' => 'kl_mobile_dj_events_cache_livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'value' => 'i:1751688452;', 'expiration' => 1751688452],
+        ]);
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        echo "Database seeded successfully!\n";
     }
 }
