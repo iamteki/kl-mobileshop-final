@@ -87,7 +87,7 @@
                             </p>
                         </div>
                         <div class="col-lg-4 text-lg-end">
-                            <a href="{{ route('contact') }}" class="btn btn-primary btn-lg">
+                            <a href="#" class="btn btn-primary btn-lg">
                                 <i class="fas fa-comments me-2"></i>Get Custom Quote
                             </a>
                         </div>
@@ -362,6 +362,7 @@
 }
 
 .features-title {
+    padding-top: 20px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 3rem;
     letter-spacing: 0.02em;
@@ -397,6 +398,7 @@
 }
 
 .feature-icon i {
+    padding-left: 10px;
     font-size: 32px;
     background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
     -webkit-background-clip: text;
@@ -476,6 +478,7 @@
     
     .package-features {
         padding: 40px 30px;
+        
     }
     
     .features-title {

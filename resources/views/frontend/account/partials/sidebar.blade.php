@@ -48,7 +48,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('contact') }}">
+                <a href="#">
                     <i class="fas fa-headset"></i>
                     <span>Support</span>
                 </a>

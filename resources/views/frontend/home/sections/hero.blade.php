@@ -14,7 +14,7 @@
                         <i class="fas fa-box me-2"></i>Browse Equipment
                     </a>
                     <a href="{{ route('packages.index') }}" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-star me-2"></i>View Packages
+                       View Packages
                     </a>
                 </div>
                 

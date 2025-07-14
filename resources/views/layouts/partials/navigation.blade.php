@@ -59,7 +59,7 @@
                             @foreach($navServiceParentCategories as $parentKey => $parentInfo)
                                 @if(isset($navServiceCategories[$parentKey]) && $navServiceCategories[$parentKey]->count() > 0)
                                     <li class="dropdown-header">
-                                        <i class="{{ $parentInfo['icon'] }} me-1"></i>
+            
                                         {{ $parentInfo['name'] }}
                                     </li>
                                     

@@ -186,7 +186,7 @@
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="{{ route('contact') }}" class="action-card">
+                            <a href="#" class="action-card">
                                 <i class="fas fa-headset"></i>
                                 <h5>Get Support</h5>
                                 <p>Contact our team for assistance</p>

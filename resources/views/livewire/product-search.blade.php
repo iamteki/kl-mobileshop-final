@@ -3,7 +3,7 @@
         <div class="row g-3 align-items-center">
             <div class="col-md-3">
                 <select wire:model="category" class="form-select">
-                    <option value="">Select Category</option>
+                    <option value="">All Categories</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                     @endforeach

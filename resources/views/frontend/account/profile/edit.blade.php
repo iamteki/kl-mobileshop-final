@@ -24,7 +24,7 @@
                         </div>
                     @endif
 
-                    @if($errors->any())
+                    @if($errors->any()))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <i class="fas fa-exclamation-circle me-2"></i>Please correct the errors below.
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -161,29 +161,29 @@
                             <h3 class="section-title">Communication Preferences</h3>
                             
                             <div class="preference-options">
-                                <div class="form-check">
-                                    <input class="form-check-input" 
+                                <div class="form-check d-flex align-items-center">
+                                    <input class="form-check-input me-3" 
                                            type="checkbox" 
                                            id="newsletter_subscribed" 
                                            name="newsletter_subscribed" 
                                            value="1"
                                            {{ old('newsletter_subscribed', $customer?->newsletter_subscribed) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="newsletter_subscribed">
-                                        <strong>Email Newsletter</strong>
-                                        <span>Receive updates about new equipment, special offers, and event tips</span>
+                                        <strong class="d-block">Email Newsletter</strong>
+                                        <span class="text-muted">Receive updates about new equipment, special offers, and event tips</span>
                                     </label>
                                 </div>
                                 
-                                <div class="form-check">
-                                    <input class="form-check-input" 
+                                <div class="form-check d-flex align-items-center">
+                                    <input class="form-check-input me-3" 
                                            type="checkbox" 
                                            id="sms_notifications" 
                                            name="sms_notifications" 
                                            value="1"
                                            {{ old('sms_notifications', $customer?->sms_notifications ?? true) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="sms_notifications">
-                                        <strong>SMS Notifications</strong>
-                                        <span>Receive booking confirmations and delivery updates via SMS</span>
+                                        <strong class="d-block">SMS Notifications</strong>
+                                        <span class="text-muted">Receive booking confirmations and delivery updates via SMS</span>
                                     </label>
                                 </div>
                             </div>
@@ -311,15 +311,16 @@
     .preference-options {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 
     .preference-options .form-check {
         background: var(--bg-dark);
         border: 1px solid var(--border-dark);
         border-radius: 10px;
-        padding: 20px;
+        padding: 15px 20px;
         transition: all 0.3s ease;
+        margin-bottom: 0;
     }
 
     .preference-options .form-check:hover {
@@ -329,9 +330,9 @@
     .form-check-input {
         width: 20px;
         height: 20px;
-        margin-top: 0;
         background-color: var(--bg-dark);
         border-color: var(--border-dark);
+        flex-shrink: 0;
     }
 
     .form-check-input:checked {
@@ -340,12 +341,11 @@
     }
 
     .form-check-label {
-        margin-left: 10px;
         cursor: pointer;
+        margin-left: 0;
     }
 
     .form-check-label strong {
-        display: block;
         color: var(--text-primary);
         margin-bottom: 5px;
     }
@@ -353,6 +353,8 @@
     .form-check-label span {
         color: var(--text-secondary);
         font-size: 0.875rem;
+        display: block;
+        line-height: 1.4;
     }
 
     /* Stats Grid */

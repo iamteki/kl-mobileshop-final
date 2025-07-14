@@ -111,7 +111,7 @@
 }
 
 .package-features li {
-    padding: 10px 0;
+    padding: 10px 10px;
     border-bottom: 1px solid var(--border-dark);
     color: var(--text-gray);
 }

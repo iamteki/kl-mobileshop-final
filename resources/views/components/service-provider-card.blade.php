@@ -3,101 +3,108 @@
     'showBookButton' => true
 ])
 
-<div class="provider-card h-100">
-    <div class="provider-image">
-        <img src="{{ $provider->profile_image_url }}" 
-             alt="{{ $provider->display_name }}"
-             loading="lazy">
-        
-        @if($provider->badge)
-            <span class="provider-badge {{ $provider->badge_class ?? '' }}">
-                {{ $provider->badge }}
-            </span>
-        @endif
-        
-        @if($provider->featured)
-            <span class="featured-badge">
-                <i class="fas fa-star"></i> Featured
-            </span>
-        @endif
-    </div>
-    
-    <div class="provider-info">
-        <div class="provider-header">
-            <h4 class="provider-name">{{ $provider->display_name }}</h4>
-            @if($provider->rating > 0)
-                <div class="provider-rating">
-                    @for($i = 1; $i <= 5; $i++)
-                        <i class="fas fa-star {{ $i <= $provider->rating ? 'text-warning' : 'text-muted' }}"></i>
-                    @endfor
-                    <span class="rating-value">{{ number_format($provider->rating, 1) }}</span>
-                    <span class="review-count">({{ $provider->total_reviews }})</span>
-                </div>
+<a href="{{ route('services.provider', [$provider->category->slug, $provider->slug]) }}" class="provider-card-link">
+    <div class="provider-card h-100">
+        <div class="provider-image">
+            <img src="{{ $provider->profile_image_url }}" 
+                 alt="{{ $provider->display_name }}"
+                 loading="lazy">
+            
+            @if($provider->badge)
+                <span class="provider-badge {{ $provider->badge_class ?? '' }}">
+                    {{ $provider->badge }}
+                </span>
+            @endif
+            
+            @if($provider->featured)
+                <span class="featured-badge">
+                    <i class="fas fa-star"></i> Featured
+                </span>
             @endif
         </div>
         
-        <p class="provider-bio">{!! Str::limit(strip_tags($provider->bio), 100) !!}</p>
-        
-        <div class="provider-details">
-            @if($provider->experience_level)
-                <div class="detail-item">
-                    <i class="fas fa-award"></i>
-                    {{ $provider->experience_level }}
-                </div>
-            @endif
+        <div class="provider-info">
+            <div class="provider-header">
+                <h4 class="provider-name">{{ $provider->display_name }}</h4>
+                @if($provider->rating > 0)
+                    <div class="provider-rating">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star {{ $i <= $provider->rating ? 'text-warning' : 'text-muted' }}"></i>
+                        @endfor
+                        <span class="rating-value">{{ number_format($provider->rating, 1) }}</span>
+                        <span class="review-count">({{ $provider->total_reviews }})</span>
+                    </div>
+                @endif
+            </div>
             
-            @if($provider->years_experience > 0)
-                <div class="detail-item">
-                    <i class="fas fa-clock"></i>
-                    {{ $provider->years_experience }} years
-                </div>
-            @endif
+            <p class="provider-bio">{!! Str::limit(strip_tags($provider->bio), 100) !!}</p>
             
-            @if($provider->languages && count($provider->languages) > 0)
-                <div class="detail-item">
-                    <i class="fas fa-language"></i>
-                    {{ implode(', ', array_slice($provider->languages, 0, 2)) }}
-                    @if(count($provider->languages) > 2)
-                        +{{ count($provider->languages) - 2 }}
+            <div class="provider-details">
+                @if($provider->experience_level)
+                    <div class="detail-item">
+                        <i class="fas fa-award"></i>
+                        {{ $provider->experience_level }}
+                    </div>
+                @endif
+                
+                @if($provider->years_experience > 0)
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        {{ $provider->years_experience }} years
+                    </div>
+                @endif
+                
+                @if($provider->languages && count($provider->languages) > 0)
+                    <div class="detail-item">
+                        <i class="fas fa-language"></i>
+                        {{ implode(', ', array_slice($provider->languages, 0, 2)) }}
+                        @if(count($provider->languages) > 2)
+                            +{{ count($provider->languages) - 2 }}
+                        @endif
+                    </div>
+                @endif
+            </div>
+            
+            @if($provider->specialties && count($provider->specialties) > 0)
+                <div class="provider-specialties">
+                    @foreach(array_slice($provider->specialties, 0, 3) as $specialty)
+                        <span class="specialty-tag">{{ $specialty }}</span>
+                    @endforeach
+                    @if(count($provider->specialties) > 3)
+                        <span class="specialty-tag">+{{ count($provider->specialties) - 3 }}</span>
                     @endif
                 </div>
             @endif
-        </div>
-        
-        @if($provider->specialties && count($provider->specialties) > 0)
-            <div class="provider-specialties">
-                @foreach(array_slice($provider->specialties, 0, 3) as $specialty)
-                    <span class="specialty-tag">{{ $specialty }}</span>
-                @endforeach
-                @if(count($provider->specialties) > 3)
-                    <span class="specialty-tag">+{{ count($provider->specialties) - 3 }}</span>
+            
+            <div class="provider-footer">
+                <div class="provider-price">
+                    <span class="price-label">From</span>
+                    <div class="price-amount">
+                        <span class="currency">LKR</span>
+                        <span class="amount">{{ number_format($provider->base_price) }}</span>
+                        <span class="price-unit">/{{ $provider->price_unit }}</span>
+                    </div>
+                </div>
+                
+                @if($showBookButton)
+                    <span class="btn btn-primary btn-sm view-profile-btn">
+                        View Profile
+                    </span>
                 @endif
             </div>
-        @endif
-        
-        <div class="provider-footer">
-            <div class="provider-price">
-                <span class="price-label">From</span>
-                <div class="price-amount">
-                    <span class="currency">LKR</span>
-                    <span class="amount">{{ number_format($provider->base_price) }}</span>
-                    <span class="price-unit">/{{ $provider->price_unit }}</span>
-                </div>
-            </div>
-            
-            @if($showBookButton)
-                <a href="{{ route('services.provider', [$provider->category->slug, $provider->slug]) }}" 
-                   class="btn btn-primary btn-sm">
-                    View Profile
-                </a>
-            @endif
         </div>
     </div>
-</div>
+</a>
 
 <style>
 /* Import Bebas Neue font */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+.provider-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
 
 .provider-card {
     background: var(--bg-card);
@@ -110,6 +117,7 @@
     cursor: pointer;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
     min-height: 520px;
+    position: relative;
 }
 
 .provider-card:hover {
@@ -319,13 +327,18 @@
 }
 
 /* Button Styling */
-.provider-card .btn-primary {
+.view-profile-btn {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.02em;
     font-size: 0.75rem;
     padding: 10px 20px;
+    background-color: var(--primary-purple);
+    border-color: var(--primary-purple);
+    color: white;
+    border-radius: 4px;
+    pointer-events: none; /* Prevent button from intercepting clicks */
 }
 
 /* Hover Effects */

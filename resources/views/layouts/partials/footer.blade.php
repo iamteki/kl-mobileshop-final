@@ -44,7 +44,7 @@
                 </p>
                 <p class="text-muted">
                     <i class="fas fa-envelope me-2" style="color: var(--primary-purple);"></i> 
-                    info@klmobile.com
+                    info@klmobileevents.com
                 </p>
             </div>
         </div>
