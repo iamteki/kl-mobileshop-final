@@ -92,7 +92,7 @@
     filter: brightness(1.1);
 }
 
-/* Alternative: If you want to use SVG instead of PNG */
+/* Alternative:  SVG instead of PNG */
 .navbar-logo-svg {
     height: 45px;
     width: auto;

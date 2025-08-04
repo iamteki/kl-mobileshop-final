@@ -3,7 +3,7 @@
     <div class="container">
         <!-- Replace text with SVG logo -->
         <a class="navbar-brand" href="{{ route('home') }}">
-            <img src="{{ asset('images/kl_mobile_final_logo.png') }}" 
+            <img src="{{ asset('images/kl_logo_final_original.svg') }}" 
                  alt="KL Mobile Events" 
                  class="navbar-logo">
         </a>
