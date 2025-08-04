@@ -57,20 +57,100 @@
     }
 
     /* Navigation */
-    .navbar {
-        background-color: var(--bg-dark) !important;
-        padding: 15px 0;
-        border-bottom: 1px solid var(--border-dark);
-    }
+    /* Updated navbar-brand styles for logo support */
+.navbar-brand {
+    /* Remove previous text-based styles */
+    /* font-family: var(--font-heading) !important;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--primary-purple) !important;
+    text-transform: uppercase;
+    letter-spacing: 1.5px; */
+    
+    /* New logo-based styles */
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+}
 
-    .navbar-brand {
-        font-weight: 700;
-        font-size: 28px;
-        color: var(--primary-purple) !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
+.navbar-brand:hover {
+    transform: translateY(-1px);
+}
 
+/* Logo image styles */
+.navbar-logo {
+    height: 45px;
+    width: auto;
+    max-width: 200px;
+    transition: all 0.3s ease;
+    filter: brightness(1);
+}
+
+.navbar-brand:hover .navbar-logo {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Alternative: If you want to use SVG instead of PNG */
+.navbar-logo-svg {
+    height: 45px;
+    width: auto;
+    max-width: 200px;
+    fill: var(--primary-purple); /* This will color the SVG if it's inline */
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover .navbar-logo-svg {
+    transform: scale(1.05);
+    fill: var(--secondary-purple);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .navbar-logo,
+    .navbar-logo-svg {
+        height: 40px;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-logo,
+    .navbar-logo-svg {
+        height: 35px;
+        max-width: 150px;
+    }
+}
+
+/* Enhanced navigation styles for logo */
+.navbar {
+    background-color: var(--bg-dark) !important;
+    padding: 10px 0; /* Reduced padding since logo needs more space */
+    border-bottom: 1px solid var(--border-dark);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+/* Adjust navbar height for logo */
+.navbar-expand-lg .navbar-collapse {
+    align-items: center;
+}
+
+/* If you prefer to keep some text alongside the logo */
+.navbar-brand-text {
+    margin-left: 10px;
+    font-family: var(--font-heading);
+    font-size: 24px;
+    color: var(--primary-purple);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .navbar-brand-text {
+        display: none; /* Hide text on mobile to save space */
+    }
+}
     .navbar-nav .nav-link {
         color: var(--text-light) !important;
         font-weight: 500;

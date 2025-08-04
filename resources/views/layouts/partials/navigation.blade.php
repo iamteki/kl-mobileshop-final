@@ -1,7 +1,12 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}">KL Mobile</a>
+        <!-- Replace text with SVG logo -->
+        <a class="navbar-brand" href="{{ route('home') }}">
+            <img src="{{ asset('images/kl_mobile_final_logo.png') }}" 
+                 alt="KL Mobile Events" 
+                 class="navbar-logo">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -126,6 +131,35 @@
 </nav>
 
 <style>
+/* Logo Styles */
+.navbar-logo {
+    height: 45px; /* Adjust height as needed */
+    width: auto;
+    max-width: 200px; /* Prevent logo from being too wide */
+    transition: all 0.3s ease;
+}
+
+/* Logo hover effect */
+.navbar-brand:hover .navbar-logo {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Responsive logo adjustments */
+@media (max-width: 991px) {
+    .navbar-logo {
+        height: 40px;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-logo {
+        height: 35px;
+        max-width: 150px;
+    }
+}
+
 /* Enhanced Dropdown Styles */
 .dropdown-menu {
     min-width: 250px;
