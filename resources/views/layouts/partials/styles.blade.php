@@ -616,6 +616,35 @@
 }
 
 
+/* Fix for navbar button consistency across all pages */
+.navbar .btn-primary {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 10px 25px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    min-height: unset !important;
+}
+
+/* Ensure Book Now button maintains consistent sizing */
+.navbar a.btn-primary[href*="booking.quick"] {
+    padding: 10px 25px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Override any inherited styles from product pages */
+.navbar .d-flex .btn-primary,
+.navbar .d-flex .btn {
+    width: auto !important;
+    flex: none !important;
+}
+
+
 
 
 </style>
