@@ -16,6 +16,9 @@
         
         <!-- Cart Dropdown -->
         @if($isOpen)
+            <!-- Mobile Overlay -->
+            <div class="cart-overlay d-md-none" wire:click="toggleCart"></div>
+            
             <div class="cart-dropdown" 
                  x-data="{ shown: @entangle('isOpen') }"
                  x-show="shown"
@@ -38,7 +41,6 @@
                     <div class="cart-dropdown-body">
                         @if(count($cartItems) > 0)
                             <div class="cart-items-list">
-                                {{-- Show ALL items, not limited --}}
                                 @foreach($cartItems as $itemId => $item)
                                     <div class="cart-dropdown-item" wire:key="dropdown-item-{{ $itemId }}">
                                         <div class="cart-item-image">
@@ -70,7 +72,6 @@
                                 @endforeach
                             </div>
                             
-                            {{-- Show view all if many items --}}
                             @if(count($cartItems) > 4)
                                 <div class="text-center py-2">
                                     <small class="text-muted">
@@ -87,12 +88,12 @@
                                 <div class="cart-actions">
                                     <a href="{{ route('cart.index') }}" 
                                        wire:click="toggleCart"
-                                       class="btn btn-outline-primary">
-                                        View Cart
+                                       class="btn btn-primary btn-view-cart">
+                                        VIEW CART
                                     </a>
                                     <a href="{{ route('checkout.event-details') }}" 
-                                       class="btn btn-primary">
-                                        Checkout
+                                       class="btn btn-primary btn-checkout">
+                                        CHECKOUT
                                     </a>
                                 </div>
                             </div>
@@ -126,7 +127,7 @@
         display: inline-block;
     }
 
-    /* Cart dropdown */
+    /* Cart dropdown - Desktop */
     .cart-dropdown {
         position: absolute;
         top: 100%;
@@ -252,6 +253,9 @@
         padding: 20px;
         border-top: 1px solid var(--border-dark, rgba(255, 255, 255, 0.1));
         background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .cart-total {
@@ -261,6 +265,7 @@
         margin-bottom: 15px;
         font-size: 16px;
         color: var(--text-light, #fff);
+        width: 100%;
     }
 
     .cart-total strong {
@@ -271,12 +276,45 @@
     .cart-actions {
         display: flex;
         gap: 10px;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
     }
 
     .cart-actions .btn {
         flex: 1;
-        padding: 8px 12px;
+        padding: 10px 16px;
         font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-view-cart {
+        background: var(--secondary-purple, #C084FC);
+        border: none;
+        color: white !important;
+    }
+
+    .btn-view-cart:hover {
+        background: var(--primary-purple, #9333EA);
+        color: white !important;
+    }
+
+    .btn-checkout {
+        background: var(--primary-purple, #9333EA);
+        border: none;
+        color: white !important;
+    }
+
+    .btn-checkout:hover {
+        background: var(--secondary-purple, #C084FC);
+        color: white !important;
     }
 
     /* Empty cart */
@@ -319,32 +357,192 @@
         opacity: 1;
     }
 
-    /* Mobile responsive */
-    @media (max-width: 576px) {
+    /* Mobile Overlay */
+    .cart-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1049;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 767px) {
+        /* Show overlay on mobile */
+        .cart-overlay {
+            display: block;
+        }
+        
+        /* Fixed positioning for mobile */
         .cart-dropdown {
-            right: -10px;
-            width: calc(100vw - 20px);
-            max-width: none;
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            right: auto !important;
+            transform: translate(-50%, -50%) !important;
+            width: 90vw !important;
+            max-width: 400px !important;
+            margin: 0 !important;
+            z-index: 1051;
         }
         
+        .cart-dropdown-inner {
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header - fixed at top */
+        .cart-dropdown-header {
+            flex-shrink: 0;
+            position: relative;
+            padding: 15px;
+        }
+        
+        .cart-dropdown-header h5 {
+            font-size: 18px;
+        }
+        
+        /* Body - scrollable */
         .cart-dropdown-body {
-            max-height: 50vh;
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(85vh - 180px);
+            -webkit-overflow-scrolling: touch;
         }
         
+        /* Footer - fixed at bottom */
+        .cart-dropdown-footer {
+            flex-shrink: 0;
+            position: relative;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Smaller items on mobile */
+        .cart-dropdown-item {
+            padding: 8px;
+            gap: 8px;
+        }
+        
+        .cart-item-image {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .cart-item-name {
+            font-size: 13px;
+        }
+        
+        .cart-item-meta {
+            font-size: 11px;
+        }
+        
+        .cart-item-price {
+            font-size: 13px;
+        }
+        
+        /* Stack buttons vertically */
         .cart-actions {
             flex-direction: column;
+            gap: 10px;
         }
         
         .cart-actions .btn {
             width: 100%;
+            padding: 14px 20px;
+            font-size: 14px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 700;
         }
+        
+        /* Make buttons same visual style on mobile */
+        .btn-view-cart,
+        .btn-checkout {
+            background: var(--primary-purple, #9333EA) !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .btn-view-cart:hover,
+        .btn-view-cart:focus,
+        .btn-checkout:hover,
+        .btn-checkout:focus {
+            background: var(--secondary-purple, #C084FC) !important;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4);
+        }
+        
+        /* Larger total text */
+        .cart-total {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .cart-total strong {
+            font-size: 22px;
+        }
+    }
+
+    /* Very small mobile */
+    @media (max-width: 400px) {
+        .cart-dropdown {
+            width: 95vw !important;
+        }
+        
+        .cart-dropdown-header {
+            padding: 12px;
+        }
+        
+        .cart-dropdown-header h5 {
+            font-size: 16px;
+        }
+        
+        .cart-items-list {
+            padding: 10px;
+        }
+    }
+
+    /* Prevent body scroll when cart is open */
+    body.cart-open {
+        overflow: hidden;
     }
     </style>
 
     @push('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Auto-close cart dropdown after item added
+    document.addEventListener('livewire:initialized', () => {
+        let isCartOpen = false;
+        
+        // Listen for cart toggle events
+        Livewire.on('cart-toggled', (data) => {
+            isCartOpen = data.isOpen;
+            
+            if (window.innerWidth <= 767) {
+                if (isCartOpen) {
+                    document.body.classList.add('cart-open');
+                } else {
+                    document.body.classList.remove('cart-open');
+                }
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 767) {
+                document.body.classList.remove('cart-open');
+            }
+        });
+        
+        // Auto-close cart after item added
         Livewire.on('item-added-to-cart', () => {
             setTimeout(() => {
                 @this.set('isOpen', false);

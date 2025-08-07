@@ -15,7 +15,8 @@ class CartDropdown extends Component
     
     protected $listeners = [
         'cartUpdated' => 'refreshCart',
-        'itemAddedToCart' => 'handleItemAdded'
+        'itemAddedToCart' => 'handleItemAdded',
+        'close-cart' => 'closeCart'
     ];
     
     public function mount()
@@ -41,6 +42,9 @@ class CartDropdown extends Component
         $this->refreshCart();
         $this->isOpen = true;
         
+        // Dispatch event for mobile handling
+        $this->dispatch('cart-toggled', isOpen: true);
+        
         // Auto-close after 3 seconds
         $this->dispatch('item-added-to-cart');
     }
@@ -48,6 +52,16 @@ class CartDropdown extends Component
     public function toggleCart()
     {
         $this->isOpen = !$this->isOpen;
+        
+        // Dispatch event for mobile handling
+        $this->dispatch('cart-toggled', isOpen: $this->isOpen);
+    }
+    
+    #[On('close-cart')]
+    public function closeCart()
+    {
+        $this->isOpen = false;
+        $this->dispatch('cart-toggled', isOpen: false);
     }
     
     public function removeItem(string $itemId)
@@ -59,6 +73,7 @@ class CartDropdown extends Component
         
         if ($this->cartCount === 0) {
             $this->isOpen = false;
+            $this->dispatch('cart-toggled', isOpen: false);
         }
         
         // Notify other components
